@@ -31,58 +31,40 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _LUA_GLOBALS_H_
-#define _LUA_GLOBALS_H_ 1
-
 #include <lua.h>
+#include <lauxlib.h>
 
-#define MPD_CONNECTION_T	"MpdClient.Connection"
-#define MPD_DIRECTORY_T		"MpdClient.Directory"
-#define MPD_ENTITY_T		"MpdClient.Entity"
-#define MPD_SONG_T		"MpdClient.Song"
-#define MPD_STATUS_T		"MpdClient.Status"
-#define MPD_STORED_PLAYLIST_T	"MpdClient.StoredPlaylist"
+#include <mpd/idle.h>
 
-void linit_connection(lua_State *L);
-void linit_directory(lua_State *L);
-void linit_entity(lua_State *L);
-void linit_idle(lua_State *L);
-void linit_song(lua_State *L);
-void linit_status(lua_State *L);
-void linit_stored_playlist(lua_State *L);
+#include "globals.h"
 
-/* Helper functions */
-#if 0
-#include <stdio.h>
-static void dumpstack(lua_State *L)
+void linit_idle(lua_State *L)
 {
-    fprintf(stderr, "-------- Lua stack dump ---------\n");
-    for(int i = lua_gettop(L); i; i--)
-    {
-        int t = lua_type(L, i);
-        switch (t)
-        {
-          case LUA_TSTRING:
-            fprintf(stderr, "%d: string: `%s'\n", i, lua_tostring(L, i));
-            break;
-          case LUA_TBOOLEAN:
-            fprintf(stderr, "%d: bool:   %s\n", i, lua_toboolean(L, i) ? "true" : "false");
-            break;
-          case LUA_TNUMBER:
-            fprintf(stderr, "%d: number: %g\n", i, lua_tonumber(L, i));
-            break;
-          case LUA_TNIL:
-            fprintf(stderr, "%d: nil\n", i);
-            break;
-          default:
-            fprintf(stderr, "%d: %s\t#%d\t%p\n", i, lua_typename(L, t),
-                    (int) lua_objlen(L, i),
-                    lua_topointer(L, i));
-            break;
-        }
-    }
-    fprintf(stderr, "------- Lua stack dump end ------\n");
-}
-#endif
+	lua_pushliteral(L, "MPD_IDLE_DATABASE");
+	lua_pushinteger(L, MPD_IDLE_DATABASE);
+	lua_settable(L, -3);
 
-#endif // _LUA_MPDCLIENT_H_
+	lua_pushliteral(L, "MPD_IDLE_STORED_PLAYLIST");
+	lua_pushinteger(L, MPD_IDLE_STORED_PLAYLIST);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "MPD_IDLE_PLAYLIST");
+	lua_pushinteger(L, MPD_IDLE_PLAYLIST);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "MPD_IDLE_PLAYER");
+	lua_pushinteger(L, MPD_IDLE_PLAYER);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "MPD_IDLE_MIXER");
+	lua_pushinteger(L, MPD_IDLE_MIXER);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "MPD_IDLE_OPTIONS");
+	lua_pushinteger(L, MPD_IDLE_OPTIONS);
+	lua_settable(L, -3);
+
+	lua_pushliteral(L, "MPD_IDLE_UPDATE");
+	lua_pushinteger(L, MPD_IDLE_UPDATE);
+	lua_settable(L, -3);
+}

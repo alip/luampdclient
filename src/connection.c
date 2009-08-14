@@ -41,6 +41,7 @@
 #include <mpd/connection.h>
 #include <mpd/command.h>
 #include <mpd/entity.h>
+#include <mpd/idle.h>
 #include <mpd/pair.h>
 #include <mpd/response.h>
 #include <mpd/status.h>
@@ -1222,6 +1223,47 @@ static int lmpdconn_get_next_entity(lua_State *L)
 	return 1;
 }
 
+/* idle.h */
+static int lmpdconn_send_idle(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_send_idle(*conn));
+
+	return 1;
+}
+
+static int lmpdconn_send_noidle(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_send_noidle(*conn));
+
+	return 1;
+}
+
+static int lmpdconn_recv_idle(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	lua_pushinteger(L, mpd_recv_idle(*conn));
+
+	return 1;
+}
+
+
 static const luaL_reg lreg_connection[] = {
 	/* connection.h */
 	{"__gc",			lmpdconn_gc},
@@ -1303,6 +1345,10 @@ static const luaL_reg lreg_connection[] = {
 	{"get_status",			lmpdconn_get_status},
 	/* entity.h */
 	{"get_next_entity",		lmpdconn_get_next_entity},
+	/* idle.h */
+	{"send_idle",			lmpdconn_send_idle},
+	{"send_noidle",			lmpdconn_send_noidle},
+	{"recv_idle",			lmpdconn_recv_idle},
 	{NULL,				NULL},
 };
 
