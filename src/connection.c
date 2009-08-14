@@ -1446,62 +1446,6 @@ void linit_connection(lua_State *L)
 	lua_pop(L, 1);
 
 	/* Push constants */
-	lua_pushliteral(L, "MPD_ERROR_SUCCESS");
-	lua_pushinteger(L, MPD_ERROR_SUCCESS);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_OOM");
-	lua_pushinteger(L, MPD_ERROR_OOM);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_ARG");
-	lua_pushinteger(L, MPD_ERROR_ARG);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_STATE");
-	lua_pushinteger(L, MPD_ERROR_STATE);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_TIMEOUT");
-	lua_pushinteger(L, MPD_ERROR_TIMEOUT);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_SYSTEM");
-	lua_pushinteger(L, MPD_ERROR_SYSTEM);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_UNKHOST");
-	lua_pushinteger(L, MPD_ERROR_UNKHOST);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_CONNPORT");
-	lua_pushinteger(L, MPD_ERROR_CONNPORT);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_NOTMPD");
-	lua_pushinteger(L, MPD_ERROR_NOTMPD);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_SENDING");
-	lua_pushinteger(L, MPD_ERROR_SENDING);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_MALFORMED");
-	lua_pushinteger(L, MPD_ERROR_MALFORMED);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_CONNCLOSED");
-	lua_pushinteger(L, MPD_ERROR_CONNCLOSED);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_ACK");
-	lua_pushinteger(L, MPD_ERROR_ACK);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_BUFFEROVERRUN");
-	lua_pushinteger(L, MPD_ERROR_BUFFEROVERRUN);
-	lua_settable(L, -3);
-
 	lua_pushliteral(L, "MPD_ACK_ERROR_UNK");
 	lua_pushinteger(L, MPD_ACK_ERROR_UNK);
 	lua_settable(L, -3);

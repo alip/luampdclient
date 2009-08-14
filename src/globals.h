@@ -47,6 +47,7 @@
 void linit_connection(lua_State *L);
 void linit_directory(lua_State *L);
 void linit_entity(lua_State *L);
+void linit_error(lua_State *L);
 void linit_idle(lua_State *L);
 void linit_output(lua_State *L);
 void linit_song(lua_State *L);
