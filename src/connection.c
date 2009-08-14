@@ -43,6 +43,7 @@
 #include <mpd/cpos.h>
 #include <mpd/entity.h>
 #include <mpd/idle.h>
+#include <mpd/list.h>
 #include <mpd/pair.h>
 #include <mpd/response.h>
 #include <mpd/status.h>
@@ -1290,6 +1291,35 @@ static int lmpdconn_recv_cpos(lua_State *L)
 	return 1;
 }
 
+/* list.h */
+static int lmpdconn_command_list_begin(lua_State *L)
+{
+	bool discrete_ok;
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	discrete_ok = lua_toboolean(L, 2);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_command_list_begin(*conn, discrete_ok));
+
+	return 1;
+}
+
+static int lmpdconn_command_list_end(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_command_list_end(*conn));
+
+	return 1;
+}
+
 static const luaL_reg lreg_connection[] = {
 	/* connection.h */
 	{"__gc",			lmpdconn_gc},
@@ -1377,6 +1407,9 @@ static const luaL_reg lreg_connection[] = {
 	{"recv_idle",			lmpdconn_recv_idle},
 	/* cpos.h */
 	{"recv_cpos",			lmpdconn_recv_cpos},
+	/* list.h */
+	{"command_list_begin",		lmpdconn_command_list_begin},
+	{"command_list_end",		lmpdconn_command_list_end},
 	{NULL,				NULL},
 };
 
