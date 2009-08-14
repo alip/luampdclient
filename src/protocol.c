@@ -31,88 +31,64 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <assert.h>
-#include <stdlib.h>
-
 #include <lua.h>
 #include <lauxlib.h>
 
-#include <mpd/connection.h>
-#include <mpd/song.h>
+#include <mpd/protocol.h>
 
 #include "globals.h"
 
-LUALIB_API int luaopen_mpdclient(lua_State *L);
-
-static int mpdclient_new(lua_State *L)
+void linit_protocol(lua_State *L)
 {
-	const char *host;
-	int port;
-	double timeout;
-	struct mpd_connection **conn;
+	lua_pushliteral(L, "MPD_ACK_ERROR_UNK");
+	lua_pushinteger(L, MPD_ACK_ERROR_UNK);
+	lua_settable(L, -3);
 
-	host = luaL_checkstring(L, 1);
-	port = luaL_checkinteger(L, 2);
-	timeout = luaL_checknumber(L, 3);
+	lua_pushliteral(L, "MPD_ACK_ERROR_NOT_LIST");
+	lua_pushinteger(L, MPD_ACK_ERROR_NOT_LIST);
+	lua_settable(L, -3);
 
-	conn = (struct mpd_connection **) lua_newuserdata(L, sizeof(struct mpd_connection *));
-	luaL_getmetatable(L, MPD_CONNECTION_T);
-	lua_setmetatable(L, -2);
+	lua_pushliteral(L, "MPD_ACK_ERROR_ARG");
+	lua_pushinteger(L, MPD_ACK_ERROR_ARG);
+	lua_settable(L, -3);
 
-	*conn = mpd_connection_new(host, port, timeout);
-	if (*conn == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
-	}
+	lua_pushliteral(L, "MPD_ACK_ERROR_PASSWORD");
+	lua_pushinteger(L, MPD_ACK_ERROR_PASSWORD);
+	lua_settable(L, -3);
 
-	return 1;
-}
+	lua_pushliteral(L, "MPD_ACK_ERROR_PERMISSION");
+	lua_pushinteger(L, MPD_ACK_ERROR_PERMISSION);
+	lua_settable(L, -3);
 
-static int mpdclient_new_song(lua_State *L)
-{
-	const char *uri;
-	struct mpd_song **song;
+	lua_pushliteral(L, "MPD_ACK_ERROR_UNKNOWN_CMD");
+	lua_pushinteger(L, MPD_ACK_ERROR_UNKNOWN_CMD);
+	lua_settable(L, -3);
 
-	uri = luaL_checkstring(L, 1);
+	lua_pushliteral(L, "MPD_ACK_ERROR_NO_EXIST");
+	lua_pushinteger(L, MPD_ACK_ERROR_NO_EXIST);
+	lua_settable(L, -3);
 
-	song = (struct mpd_song **) lua_newuserdata(L, sizeof(struct mpd_song *));
-	luaL_getmetatable(L, MPD_SONG_T);
-	lua_setmetatable(L, -2);
+	lua_pushliteral(L, "MPD_ACK_ERROR_PLAYLIST_MAX");
+	lua_pushinteger(L, MPD_ACK_ERROR_PLAYLIST_MAX);
+	lua_settable(L, -3);
 
-	*song = mpd_song_new(uri);
-	if (*song == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
-	}
+	lua_pushliteral(L, "MPD_ACK_ERROR_SYSTEM");
+	lua_pushinteger(L, MPD_ACK_ERROR_SYSTEM);
+	lua_settable(L, -3);
 
-	return 1;
-}
+	lua_pushliteral(L, "MPD_ACK_ERROR_PLAYLIST_LOAD");
+	lua_pushinteger(L, MPD_ACK_ERROR_PLAYLIST_LOAD);
+	lua_settable(L, -3);
 
-static const luaL_reg reg_global[] = {
-	{"new",		mpdclient_new},
-	{"new_song",	mpdclient_new_song},
-	{NULL,		NULL},
-};
+	lua_pushliteral(L, "MPD_ACK_ERROR_UPDATE_ALREADY");
+	lua_pushinteger(L, MPD_ACK_ERROR_UPDATE_ALREADY);
+	lua_settable(L, -3);
 
-LUALIB_API int luaopen_mpdclient(lua_State *L)
-{
-	/* Register mpdclient module */
-	luaL_register(L, "mpdclient", reg_global);
+	lua_pushliteral(L, "MPD_ACK_ERROR_PLAYER_SYNC");
+	lua_pushinteger(L, MPD_ACK_ERROR_PLAYER_SYNC);
+	lua_settable(L, -3);
 
-	linit_connection(L);
-	linit_directory(L);
-	linit_entity(L);
-	linit_error(L);
-	linit_idle(L);
-	linit_output(L);
-	linit_protocol(L);
-	linit_song(L);
-	linit_status(L);
-	linit_stored_playlist(L);
-
-	return 1;
+	lua_pushliteral(L, "MPD_ACK_ERROR_EXIST");
+	lua_pushinteger(L, MPD_ACK_ERROR_EXIST);
+	lua_settable(L, -3);
 }
