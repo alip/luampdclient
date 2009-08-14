@@ -5,6 +5,7 @@ AC_PREREQ(2.59)
 AC_INIT([src/mpdclient.c])
 
 AM_INIT_AUTOMAKE(luampdclient, [2.0~git])
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 dnl }}}
 
 dnl {{{ Toolchain checks
