@@ -44,6 +44,7 @@
 #include <mpd/entity.h>
 #include <mpd/idle.h>
 #include <mpd/list.h>
+#include <mpd/output.h>
 #include <mpd/pair.h>
 #include <mpd/response.h>
 #include <mpd/status.h>
@@ -1320,6 +1321,25 @@ static int lmpdconn_command_list_end(lua_State *L)
 	return 1;
 }
 
+static int lmpdconn_output_get_next(lua_State *L)
+{
+	struct mpd_connection **conn;
+	struct mpd_output **output;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	output = (struct mpd_output **) lua_newuserdata(L, sizeof(struct mpd_output *));
+	luaL_getmetatable(L, MPD_OUTPUT_T);
+	lua_setmetatable(L, -2);
+
+	*output = mpd_output_get_next(*conn);
+	if (*output == NULL)
+		lua_pushnil(L);
+	return 1;
+}
+
 static const luaL_reg lreg_connection[] = {
 	/* connection.h */
 	{"__gc",			lmpdconn_gc},
@@ -1410,6 +1430,8 @@ static const luaL_reg lreg_connection[] = {
 	/* list.h */
 	{"command_list_begin",		lmpdconn_command_list_begin},
 	{"command_list_end",		lmpdconn_command_list_end},
+	/* output.h */
+	{"output_get_next",		lmpdconn_output_get_next},
 	{NULL,				NULL},
 };
 

@@ -31,60 +31,61 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _LUA_GLOBALS_H_
-#define _LUA_GLOBALS_H_ 1
+#include <assert.h>
+#include <string.h>
 
 #include <lua.h>
+#include <lauxlib.h>
 
-#define MPD_CONNECTION_T	"MpdClient.Connection"
-#define MPD_DIRECTORY_T		"MpdClient.Directory"
-#define MPD_ENTITY_T		"MpdClient.Entity"
-#define MPD_OUTPUT_T		"MpdClient.Output"
-#define MPD_SONG_T		"MpdClient.Song"
-#define MPD_STATUS_T		"MpdClient.Status"
-#define MPD_STORED_PLAYLIST_T	"MpdClient.StoredPlaylist"
+#include <mpd/output.h>
 
-void linit_connection(lua_State *L);
-void linit_directory(lua_State *L);
-void linit_entity(lua_State *L);
-void linit_idle(lua_State *L);
-void linit_output(lua_State *L);
-void linit_song(lua_State *L);
-void linit_status(lua_State *L);
-void linit_stored_playlist(lua_State *L);
+#include "globals.h"
 
-/* Helper functions */
-#if 0
-#include <stdio.h>
-static void dumpstack(lua_State *L)
+static int lmpdoutput_gc(lua_State *L)
 {
-    fprintf(stderr, "-------- Lua stack dump ---------\n");
-    for(int i = lua_gettop(L); i; i--)
-    {
-        int t = lua_type(L, i);
-        switch (t)
-        {
-          case LUA_TSTRING:
-            fprintf(stderr, "%d: string: `%s'\n", i, lua_tostring(L, i));
-            break;
-          case LUA_TBOOLEAN:
-            fprintf(stderr, "%d: bool:   %s\n", i, lua_toboolean(L, i) ? "true" : "false");
-            break;
-          case LUA_TNUMBER:
-            fprintf(stderr, "%d: number: %g\n", i, lua_tonumber(L, i));
-            break;
-          case LUA_TNIL:
-            fprintf(stderr, "%d: nil\n", i);
-            break;
-          default:
-            fprintf(stderr, "%d: %s\t#%d\t%p\n", i, lua_typename(L, t),
-                    (int) lua_objlen(L, i),
-                    lua_topointer(L, i));
-            break;
-        }
-    }
-    fprintf(stderr, "------- Lua stack dump end ------\n");
-}
-#endif
+	struct mpd_output **output;
 
-#endif // _LUA_MPDCLIENT_H_
+	output = luaL_checkudata(L, 1, MPD_OUTPUT_T);
+
+	if (*output != NULL)
+		mpd_output_free(*output);
+	*output = NULL;
+
+	return 0;
+}
+
+static int lmpdoutput_index(lua_State *L)
+{
+	const char *key;
+	struct mpd_output **output;
+
+	output = luaL_checkudata(L, 1, MPD_OUTPUT_T);
+	key = luaL_checkstring(L, 2);
+
+	assert(*output != NULL);
+
+	if (strncmp(key, "id", 3) == 0)
+		lua_pushinteger(L, (*output)->id);
+	else if (strncmp(key, "name", 5) == 0)
+		lua_pushstring(L, (*output)->name);
+	else if (strncmp(key, "enabled", 8) == 0)
+		lua_pushboolean(L, (*output)->enabled);
+	else
+		return luaL_error(L, "Invalid key `%s'", key);
+
+	return 1;
+}
+
+static const luaL_reg lreg_output[] = {
+	{"__gc",	lmpdoutput_gc},
+	{"__index",	lmpdoutput_index},
+	{NULL,		NULL},
+};
+
+void linit_output(lua_State *L)
+{
+	/* Register MPD_OUTPUT_T metatable */
+	luaL_newmetatable(L, MPD_OUTPUT_T);
+	luaL_register(L, NULL, lreg_output);
+	lua_pop(L, 1);
+}
