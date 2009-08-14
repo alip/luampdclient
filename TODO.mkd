@@ -1,0 +1,33 @@
+### Library Status ###
+
+The following files are done:
+
+  - mpd/command.h
+  - mpd/connection.h
+  - mpd/cpos.h
+  - mpd/directory.h
+  - mpd/entity.h
+  - mpd/error.h
+  - mpd/idle.h
+  - mpd/list.h
+  - mpd/output.h
+  - mpd/pair.h (we use Lua tables instead of mpd_pair)
+  - mpd/protocol.h
+  - mpd/response.h
+  - mpd/song.h
+  - mpd/status.h
+  - mpd/stored_playlist.h
+  - mpd/tag.h
+
+These files are left:
+
+  - mpd/async.h
+  - mpd/parser.h
+  - mpd/recv.h
+  - mpd/run.h
+  - mpd/search.h
+  - mpd/send.h
+  - mpd/stats.h
+
+### Documentation ###
+Documentation is lacking.
