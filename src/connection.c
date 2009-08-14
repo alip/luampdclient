@@ -40,6 +40,7 @@
 
 #include <mpd/connection.h>
 #include <mpd/command.h>
+#include <mpd/cpos.h>
 #include <mpd/entity.h>
 #include <mpd/idle.h>
 #include <mpd/pair.h>
@@ -1263,6 +1264,31 @@ static int lmpdconn_recv_idle(lua_State *L)
 	return 1;
 }
 
+/* cpos.h */
+static int lmpdconn_recv_cpos(lua_State *L)
+{
+	struct mpd_cpos cpos;
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	luaL_checktype(L, 2, LUA_TTABLE);
+
+	assert(*conn != NULL);
+
+	lua_pushliteral(L, "position");
+	lua_gettable(L, -2);
+	cpos.position = luaL_checkinteger(L, -1);
+	lua_pop(L, 1);
+
+	lua_pushliteral(L, "id");
+	lua_gettable(L, -2);
+	cpos.id = luaL_checkinteger(L, -1);
+	lua_pop(L, 1);
+
+	lua_pushboolean(L, mpd_recv_cpos(*conn, &cpos));
+
+	return 1;
+}
 
 static const luaL_reg lreg_connection[] = {
 	/* connection.h */
@@ -1349,6 +1375,8 @@ static const luaL_reg lreg_connection[] = {
 	{"send_idle",			lmpdconn_send_idle},
 	{"send_noidle",			lmpdconn_send_noidle},
 	{"recv_idle",			lmpdconn_recv_idle},
+	/* cpos.h */
+	{"recv_cpos",			lmpdconn_recv_cpos},
 	{NULL,				NULL},
 };
 
