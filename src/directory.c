@@ -93,8 +93,8 @@ static int lmpddirectory_index(lua_State *L)
 		return 1;
 	}
 	else if (strncmp(key, "path", 5) == 0) {
-		if ((*dir)->path != NULL)
-			lua_pushstring(L, (*dir)->path);
+		if (mpd_directory_get_path(*dir) != NULL)
+			lua_pushstring(L, mpd_directory_get_path(*dir));
 		else
 			lua_pushnil(L);
 		return 1;

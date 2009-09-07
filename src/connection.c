@@ -173,7 +173,7 @@ static int lmpdconn_recv_pair(lua_State *L)
 	lua_pushstring(L, pair->value);
 	lua_settable(L, -3);
 
-	mpd_pair_free(pair);
+	mpd_return_pair(*conn, pair);
 	return 1;
 }
 
@@ -206,7 +206,7 @@ static int lmpdconn_recv_pair_named(lua_State *L)
 	lua_pushstring(L, pair->value);
 	lua_settable(L, -3);
 
-	mpd_pair_free(pair);
+	mpd_return_pair(*conn, pair);
 	return 1;
 }
 
@@ -229,6 +229,11 @@ static int lmpdconn_recv_value_named(lua_State *L)
 	return 1;
 }
 
+/* FIXME: Find a way to get this to work
+ * libmpdclient no longer wants you to make pairs yourself
+ * Maybe create another user data for the pair?
+ */
+#if 0
 static int lmpdconn_enqueue_pair(lua_State *L)
 {
 	const char *name, *value;
@@ -262,6 +267,7 @@ static int lmpdconn_enqueue_pair(lua_State *L)
 	lua_pushboolean(L, 1);
 	return 1;
 }
+#endif
 
 /* command.h */
 static int lmpdconn_send_status(lua_State *L)
@@ -1182,7 +1188,7 @@ static int lmpdconn_recv_tag_type_name(lua_State *L)
 }
 
 /* status.h */
-static int lmpdconn_get_status(lua_State *L)
+static int lmpdconn_recv_status(lua_State *L)
 {
 	struct mpd_connection **conn;
 	struct mpd_status **status;
@@ -1195,7 +1201,7 @@ static int lmpdconn_get_status(lua_State *L)
 	luaL_getmetatable(L, MPD_STATUS_T);
 	lua_setmetatable(L, -2);
 
-	*status = mpd_get_status(*conn);
+	*status = mpd_recv_status(*conn);
 	if (*status == NULL) {
 		/* Push nil and error message */
 		lua_pushnil(L);
@@ -1207,7 +1213,7 @@ static int lmpdconn_get_status(lua_State *L)
 }
 
 /* entity.h */
-static int lmpdconn_get_next_entity(lua_State *L)
+static int lmpdconn_recv_entity(lua_State *L)
 {
 	struct mpd_connection **conn;
 	struct mpd_entity **entity;
@@ -1220,7 +1226,7 @@ static int lmpdconn_get_next_entity(lua_State *L)
 	luaL_getmetatable(L, MPD_ENTITY_T);
 	lua_setmetatable(L, -2);
 
-	*entity = mpd_get_next_entity(*conn);
+	*entity = mpd_recv_entity(*conn);
 	if (*entity == NULL)
 		lua_pushnil(L);
 	return 1;
@@ -1321,7 +1327,7 @@ static int lmpdconn_command_list_end(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_output_get_next(lua_State *L)
+static int lmpdconn_recv_output(lua_State *L)
 {
 	struct mpd_connection **conn;
 	struct mpd_output **output;
@@ -1334,7 +1340,7 @@ static int lmpdconn_output_get_next(lua_State *L)
 	luaL_getmetatable(L, MPD_OUTPUT_T);
 	lua_setmetatable(L, -2);
 
-	*output = mpd_output_get_next(*conn);
+	*output = mpd_recv_output(*conn);
 	if (*output == NULL)
 		lua_pushnil(L);
 	return 1;
@@ -1353,7 +1359,7 @@ static const luaL_reg lreg_connection[] = {
 	{"recv_pair",			lmpdconn_recv_pair},
 	{"recv_pair_named",		lmpdconn_recv_pair_named},
 	{"recv_value_named",		lmpdconn_recv_value_named},
-	{"enqueue_pair",		lmpdconn_enqueue_pair},
+	//{"enqueue_pair",		lmpdconn_enqueue_pair},
 	/* command.h */
 	{"send_status",			lmpdconn_send_status},
 	{"send_currentsong",		lmpdconn_send_currentsong},
@@ -1418,9 +1424,9 @@ static const luaL_reg lreg_connection[] = {
 	{"recv_handler",		lmpdconn_recv_handler},
 	{"recv_tag_type_name",		lmpdconn_recv_tag_type_name},
 	/* status.h */
-	{"get_status",			lmpdconn_get_status},
+	{"recv_status",			lmpdconn_recv_status},
 	/* entity.h */
-	{"get_next_entity",		lmpdconn_get_next_entity},
+	{"recv_entity",			lmpdconn_recv_entity},
 	/* idle.h */
 	{"send_idle",			lmpdconn_send_idle},
 	{"send_noidle",			lmpdconn_send_noidle},
@@ -1431,7 +1437,7 @@ static const luaL_reg lreg_connection[] = {
 	{"command_list_begin",		lmpdconn_command_list_begin},
 	{"command_list_end",		lmpdconn_command_list_end},
 	/* output.h */
-	{"output_get_next",		lmpdconn_output_get_next},
+	{"recv_output",			lmpdconn_recv_output},
 	{NULL,				NULL},
 };
 

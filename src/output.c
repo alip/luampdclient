@@ -65,11 +65,11 @@ static int lmpdoutput_index(lua_State *L)
 	assert(*output != NULL);
 
 	if (strncmp(key, "id", 3) == 0)
-		lua_pushinteger(L, (*output)->id);
+		lua_pushinteger(L, mpd_output_get_id(*output));
 	else if (strncmp(key, "name", 5) == 0)
-		lua_pushstring(L, (*output)->name);
+		lua_pushstring(L, mpd_output_get_name(*output));
 	else if (strncmp(key, "enabled", 8) == 0)
-		lua_pushboolean(L, (*output)->enabled);
+		lua_pushboolean(L, mpd_output_get_enabled(*output));
 	else
 		return luaL_error(L, "Invalid key `%s'", key);
 
