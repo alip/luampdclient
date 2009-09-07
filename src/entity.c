@@ -72,14 +72,14 @@ static int lmpdentity_index(lua_State *L)
 	assert(*entity != NULL);
 
 	if (strncmp(key, "type", 5) == 0) {
-		lua_pushinteger(L, (*entity)->type);
+		lua_pushinteger(L, mpd_entity_get_type(*entity));
 	}
 	else if (strncmp(key, "directory", 10) == 0) {
 		dir = (struct mpd_directory **) lua_newuserdata(L, sizeof(struct mpd_directory *));
 		luaL_getmetatable(L, MPD_DIRECTORY_T);
 		lua_setmetatable(L, -2);
 
-		*dir = mpd_directory_dup((*entity)->info.directory);
+		*dir = mpd_directory_dup(mpd_entity_get_directory(*entity));
 		if (*dir == NULL)
 			lua_pushnil(L);
 	}
@@ -88,7 +88,7 @@ static int lmpdentity_index(lua_State *L)
 		luaL_getmetatable(L, MPD_SONG_T);
 		lua_setmetatable(L, -2);
 
-		*song = mpd_song_dup((*entity)->info.song);
+		*song = mpd_song_dup(mpd_entity_get_song(*entity));
 		if (*song == NULL)
 			lua_pushnil(L);
 	}
@@ -97,7 +97,7 @@ static int lmpdentity_index(lua_State *L)
 		luaL_getmetatable(L, MPD_STORED_PLAYLIST_T);
 		lua_setmetatable(L, -2);
 
-		*spl = mpd_stored_playlist_dup((*entity)->info.playlistFile);
+		*spl = mpd_stored_playlist_dup(mpd_entity_get_stored_playlist(*entity));
 		if (*spl == NULL)
 			lua_pushnil(L);
 	}

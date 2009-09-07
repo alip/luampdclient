@@ -93,8 +93,8 @@ static int lmpdstored_playlist_index(lua_State *L)
 		return 1;
 	}
 	else if (strncmp(key, "path", 5) == 0) {
-		if ((*spl)->path != NULL)
-			lua_pushstring(L, (*spl)->path);
+		if (mpd_stored_playlist_get_path(*spl) != NULL)
+			lua_pushstring(L, mpd_stored_playlist_get_path(*spl));
 		else
 			lua_pushnil(L);
 		return 1;
