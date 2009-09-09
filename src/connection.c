@@ -1374,10 +1374,6 @@ static const luaL_reg lreg_connection[] = {
 	{"clear_error",			lmpdconn_clear_error},
 	{"get_server_version",		lmpdconn_get_server_version},
 	{"cmp_server_version",		lmpdconn_cmp_server_version},
-	{"recv_pair",			lmpdconn_recv_pair},
-	{"recv_pair_named",		lmpdconn_recv_pair_named},
-	{"recv_value_named",		lmpdconn_recv_value_named},
-	//{"enqueue_pair",		lmpdconn_enqueue_pair},
 	/* command.h */
 	{"send_status",			lmpdconn_send_status},
 	{"send_currentsong",		lmpdconn_send_currentsong},
@@ -1430,9 +1426,13 @@ static const luaL_reg lreg_connection[] = {
 	{"send_notcommands",		lmpdconn_send_notcommands},
 	{"send_urlhandlers",		lmpdconn_send_urlhandlers},
 	{"send_tagtypes",		lmpdconn_send_tagtypes},
-	{"send_outputs",		lmpdconn_send_outputs},
 	{"send_enable_output",		lmpdconn_send_enable_output},
 	{"send_disabl_eoutput",		lmpdconn_send_disable_output},
+	/* recv.h */
+	{"recv_pair",			lmpdconn_recv_pair},
+	{"recv_pair_named",		lmpdconn_recv_pair_named},
+	{"recv_value_named",		lmpdconn_recv_value_named},
+	//{"enqueue_pair",		lmpdconn_enqueue_pair},
 	/* response.h */
 	{"response_finish",		lmpdconn_response_finish},
 	{"reponse_next",		lmpdconn_response_next},
@@ -1456,6 +1456,7 @@ static const luaL_reg lreg_connection[] = {
 	{"command_list_end",		lmpdconn_command_list_end},
 	/* output.h */
 	{"recv_output",			lmpdconn_recv_output},
+	{"send_outputs",		lmpdconn_send_outputs},
 	{NULL,				NULL},
 };
 
