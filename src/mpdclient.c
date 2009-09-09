@@ -1,4 +1,4 @@
-/* vim: set cino= fo=croql sw=8 ts=8 sts=0 autoindent cindent fdm=syntax : */
+/* vim: set cino= fo=croql sw=8 ts=8 sts=0 noet autoindent cindent fdm=syntax : */
 
 /* libmpdclient Lua bindings
    (c) 2009 Ali Polatel <polatel@gmail.com>
