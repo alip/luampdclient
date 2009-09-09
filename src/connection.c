@@ -232,6 +232,22 @@ static int lmpdconn_recv_value_named(lua_State *L)
 	return 1;
 }
 
+static int lmpdconn_return_pair(lua_State *L)
+{
+	struct mpd_connection **conn;
+	struct mpd_pair **pair;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	pair = luaL_checkudata(L, 2, MPD_PAIR_T);
+
+	assert(*conn != NULL);
+	assert(*pair != NULL);
+
+	mpd_return_pair(*conn, *pair);
+	lua_pushboolean(L, 1);
+	return 1;
+}
+
 static int lmpdconn_enqueue_pair(lua_State *L)
 {
 	struct mpd_connection **conn;
@@ -1394,6 +1410,7 @@ static const luaL_reg lreg_connection[] = {
 	{"recv_pair",			lmpdconn_recv_pair},
 	{"recv_pair_named",		lmpdconn_recv_pair_named},
 	{"recv_value_named",		lmpdconn_recv_value_named},
+	{"return_pair",			lmpdconn_return_pair},
 	{"enqueue_pair",		lmpdconn_enqueue_pair},
 	/* response.h */
 	{"response_finish",		lmpdconn_response_finish},
