@@ -1427,7 +1427,7 @@ static const luaL_reg lreg_connection[] = {
 	{"send_urlhandlers",		lmpdconn_send_urlhandlers},
 	{"send_tagtypes",		lmpdconn_send_tagtypes},
 	{"send_enable_output",		lmpdconn_send_enable_output},
-	{"send_disabl_eoutput",		lmpdconn_send_disable_output},
+	{"send_disable_output",		lmpdconn_send_disable_output},
 	/* recv.h */
 	{"recv_pair",			lmpdconn_recv_pair},
 	{"recv_pair_named",		lmpdconn_recv_pair_named},
