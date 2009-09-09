@@ -146,6 +146,23 @@ static int lmpdconn_get_server_version(lua_State *L)
 	return 3;
 }
 
+static int lmpdconn_cmp_server_version(lua_State *L)
+{
+	struct mpd_connection **conn;
+	lua_Integer major, minor, patch;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	major = luaL_checkinteger(L, 2);
+	minor = luaL_checkinteger(L, 3);
+	patch = luaL_checkinteger(L, 4);
+
+	assert(*conn != NULL);
+
+	lua_pushinteger(L, mpd_cmp_server_version(*conn, major, minor, patch));
+
+	return 1;
+}
+
 static int lmpdconn_recv_pair(lua_State *L)
 {
 	struct mpd_connection **conn;
@@ -1356,6 +1373,7 @@ static const luaL_reg lreg_connection[] = {
 	{"get_server_error",		lmpdconn_get_server_error},
 	{"clear_error",			lmpdconn_clear_error},
 	{"get_server_version",		lmpdconn_get_server_version},
+	{"cmp_server_version",		lmpdconn_cmp_server_version},
 	{"recv_pair",			lmpdconn_recv_pair},
 	{"recv_pair_named",		lmpdconn_recv_pair_named},
 	{"recv_value_named",		lmpdconn_recv_value_named},
