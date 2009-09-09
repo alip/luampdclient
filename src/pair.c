@@ -1,7 +1,8 @@
 /* vim: set cino= fo=croql sw=8 ts=8 sts=0 noet autoindent cindent fdm=syntax : */
 
 /* libmpdclient Lua bindings
-   (c) 2009 Ali Polatel <polatel@gmail.com>
+   (c) 2003-2009 The Music Player Daemon Project
+   This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -32,88 +33,58 @@
 */
 
 #include <assert.h>
-#include <stdlib.h>
+#include <string.h>
 
 #include <lua.h>
 #include <lauxlib.h>
 
-#include <mpd/connection.h>
-#include <mpd/song.h>
+#include <mpd/pair.h>
+#include <mpd/recv.h>
 
 #include "globals.h"
 
-LUALIB_API int luaopen_mpdclient(lua_State *L);
-
-static int mpdclient_new(lua_State *L)
+static int lmpdpair_gc(lua_State *L)
 {
-	const char *host;
-	int port;
-	double timeout;
-	struct mpd_connection **conn;
+	struct mpd_entity **pair;
 
-	host = luaL_checkstring(L, 1);
-	port = luaL_checkinteger(L, 2);
-	timeout = luaL_checknumber(L, 3);
+	pair = luaL_checkudata(L, 1, MPD_PAIR_T);
 
-	conn = (struct mpd_connection **) lua_newuserdata(L, sizeof(struct mpd_connection *));
-	luaL_getmetatable(L, MPD_CONNECTION_T);
-	lua_setmetatable(L, -2);
+	// if (*pair != NULL)
+	//	mpd_return_pair(*pair);
+	//*pair = NULL;
 
-	*conn = mpd_connection_new(host, port, timeout);
-	if (*conn == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
-	}
+	return 0;
+}
 
+static int lmpdpair_index(lua_State *L)
+{
+	const char *key;
+	struct mpd_pair **pair;
+
+	pair = luaL_checkudata(L, 1, MPD_PAIR_T);
+	key = luaL_checkstring(L, 2);
+
+	assert(*pair != NULL);
+
+	if (strncmp(key, "name", 4) == 0)
+		lua_pushstring(L, (*pair)->name);
+	else if (strncmp(key, "value", 5) == 0)
+		lua_pushstring(L, (*pair)->value);
+	else
+		return luaL_error(L, "Invalid key `%s'", key);
 	return 1;
 }
 
-static int mpdclient_new_song(lua_State *L)
-{
-	const char *uri;
-	struct mpd_song **song;
-
-	uri = luaL_checkstring(L, 1);
-
-	song = (struct mpd_song **) lua_newuserdata(L, sizeof(struct mpd_song *));
-	luaL_getmetatable(L, MPD_SONG_T);
-	lua_setmetatable(L, -2);
-
-	*song = mpd_song_new(uri);
-	if (*song == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
-	}
-
-	return 1;
-}
-
-static const luaL_reg reg_global[] = {
-	{"new",		mpdclient_new},
-	{"new_song",	mpdclient_new_song},
+static const luaL_reg lreg_pair[] = {
+	{"__gc",	lmpdpair_gc},
+	{"__index",	lmpdpair_index},
 	{NULL,		NULL},
 };
 
-LUALIB_API int luaopen_mpdclient(lua_State *L)
+void linit_pair(lua_State *L)
 {
-	/* Register mpdclient module */
-	luaL_register(L, "mpdclient", reg_global);
-
-	linit_connection(L);
-	linit_directory(L);
-	linit_entity(L);
-	linit_error(L);
-	linit_idle(L);
-	linit_output(L);
-	linit_pair(L);
-	linit_protocol(L);
-	linit_song(L);
-	linit_status(L);
-	linit_stored_playlist(L);
-
-	return 1;
+	/* Register MPD_PAIR_T metatable */
+	luaL_newmetatable(L, MPD_PAIR_T);
+	luaL_register(L, NULL, lreg_pair);
+	lua_pop(L, 1);
 }

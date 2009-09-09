@@ -166,31 +166,24 @@ static int lmpdconn_cmp_server_version(lua_State *L)
 static int lmpdconn_recv_pair(lua_State *L)
 {
 	struct mpd_connection **conn;
-	struct mpd_pair *pair;
+	struct mpd_pair **pair;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
 
 	assert(*conn != NULL);
 
-	pair = mpd_recv_pair(*conn);
-	if (pair == NULL) {
+	pair = (struct mpd_pair **) lua_newuserdata(L, sizeof(struct mpd_pair *));
+	luaL_getmetatable(L, MPD_PAIR_T);
+	lua_setmetatable(L, -2);
+
+	*pair = mpd_recv_pair(*conn);
+	if (*pair == NULL) {
 		/* Push nil and error message */
 		lua_pushnil(L);
 		lua_pushliteral(L, "mpd_recv_pair");
 		return 2;
 	}
 
-	lua_newtable(L);
-
-	lua_pushliteral(L, "name");
-	lua_pushstring(L, pair->name);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "value");
-	lua_pushstring(L, pair->value);
-	lua_settable(L, -3);
-
-	mpd_return_pair(*conn, pair);
 	return 1;
 }
 
@@ -198,32 +191,25 @@ static int lmpdconn_recv_pair_named(lua_State *L)
 {
 	const char *name;
 	struct mpd_connection **conn;
-	struct mpd_pair *pair;
+	struct mpd_pair **pair;
+
+	pair = (struct mpd_pair **) lua_newuserdata(L, sizeof(struct mpd_pair *));
+	luaL_getmetatable(L, MPD_PAIR_T);
+	lua_setmetatable(L, -2);
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
 	name = luaL_checkstring(L, 2);
 
 	assert(*conn != NULL);
 
-	pair = mpd_recv_pair_named(*conn, name);
-	if (pair == NULL) {
+	*pair = mpd_recv_pair_named(*conn, name);
+	if (*pair == NULL) {
 		/* Push nil and error message */
 		lua_pushnil(L);
 		lua_pushliteral(L, "mpd_recv_pair_named");
 		return 2;
 	}
 
-	lua_newtable(L);
-
-	lua_pushliteral(L, "name");
-	lua_pushstring(L, pair->name);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "value");
-	lua_pushstring(L, pair->value);
-	lua_settable(L, -3);
-
-	mpd_return_pair(*conn, pair);
 	return 1;
 }
 
@@ -241,50 +227,26 @@ static int lmpdconn_recv_value_named(lua_State *L)
 	value = mpd_recv_value_named(*conn, name);
 
 	lua_pushstring(L, value);
-	free(value);
+	mpd_value_free(value);
 
 	return 1;
 }
 
-/* FIXME: Find a way to get this to work
- * libmpdclient no longer wants you to make pairs yourself
- * Maybe create another user data for the pair?
- */
-#if 0
 static int lmpdconn_enqueue_pair(lua_State *L)
 {
-	const char *name, *value;
 	struct mpd_connection **conn;
-	struct mpd_pair *pair;
+	struct mpd_pair **pair;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
-	luaL_checktype(L, 2, LUA_TTABLE);
+	pair = luaL_checkudata(L, 2, MPD_PAIR_T);
 
 	assert(*conn != NULL);
+	assert(*pair != NULL);
 
-	lua_pushliteral(L, "name");
-	lua_gettable(L, -2);
-	name = luaL_checkstring(L, -1);
-	lua_pop(L, 1);
-
-	lua_pushliteral(L, "value");
-	lua_gettable(L, -2);
-	value = luaL_checkstring(L, -1);
-	lua_pop(L, 1);
-
-	pair = mpd_pair_new(name, value);
-	if (pair == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
-	}
-
-	mpd_enqueue_pair(*conn, pair);
+	mpd_enqueue_pair(*conn, *pair);
 	lua_pushboolean(L, 1);
 	return 1;
 }
-#endif
 
 /* command.h */
 static int lmpdconn_send_status(lua_State *L)
@@ -1432,7 +1394,7 @@ static const luaL_reg lreg_connection[] = {
 	{"recv_pair",			lmpdconn_recv_pair},
 	{"recv_pair_named",		lmpdconn_recv_pair_named},
 	{"recv_value_named",		lmpdconn_recv_value_named},
-	//{"enqueue_pair",		lmpdconn_enqueue_pair},
+	{"enqueue_pair",		lmpdconn_enqueue_pair},
 	/* response.h */
 	{"response_finish",		lmpdconn_response_finish},
 	{"reponse_next",		lmpdconn_response_next},
