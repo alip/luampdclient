@@ -43,19 +43,6 @@
 
 #include "globals.h"
 
-static int lmpdpair_gc(lua_State *L)
-{
-	struct mpd_entity **pair;
-
-	pair = luaL_checkudata(L, 1, MPD_PAIR_T);
-
-	// if (*pair != NULL)
-	//	mpd_return_pair(*pair);
-	//*pair = NULL;
-
-	return 0;
-}
-
 static int lmpdpair_index(lua_State *L)
 {
 	const char *key;
@@ -76,7 +63,6 @@ static int lmpdpair_index(lua_State *L)
 }
 
 static const luaL_reg lreg_pair[] = {
-	{"__gc",	lmpdpair_gc},
 	{"__index",	lmpdpair_index},
 	{NULL,		NULL},
 };
