@@ -1,8 +1,7 @@
 /* vim: set cino= fo=croql sw=8 ts=8 sts=0 noet autoindent cindent fdm=syntax : */
 
 /* libmpdclient Lua bindings
-   (c) 2003-2009 The Music Player Daemon Project
-   This project's homepage is: http://www.musicpd.org
+   (c) 2009 Ali Polatel <alip@exherbo.org>
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
