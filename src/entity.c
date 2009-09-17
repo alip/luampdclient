@@ -40,7 +40,7 @@
 #include <mpd/directory.h>
 #include <mpd/entity.h>
 #include <mpd/song.h>
-#include <mpd/stored_playlist.h>
+#include <mpd/playlist.h>
 
 #include "globals.h"
 
@@ -63,7 +63,7 @@ static int lmpdentity_index(lua_State *L)
 	struct mpd_entity **entity;
 	struct mpd_directory **dir;
 	struct mpd_song **song;
-	struct mpd_stored_playlist **spl;
+	struct mpd_playlist **spl;
 
 	entity = luaL_checkudata(L, 1, MPD_ENTITY_T);
 	key = luaL_checkstring(L, 2);
@@ -91,12 +91,12 @@ static int lmpdentity_index(lua_State *L)
 		if (*song == NULL)
 			lua_pushnil(L);
 	}
-	else if (strncmp(key, "playlistFile", 13) == 0) {
-		spl = (struct mpd_stored_playlist **) lua_newuserdata(L, sizeof(struct mpd_stored_playlist *));
-		luaL_getmetatable(L, MPD_STORED_PLAYLIST_T);
+	else if (strncmp(key, "playlist", 9) == 0) {
+		spl = (struct mpd_playlist **) lua_newuserdata(L, sizeof(struct mpd_playlist *));
+		luaL_getmetatable(L, MPD_PLAYLIST_T);
 		lua_setmetatable(L, -2);
 
-		*spl = mpd_stored_playlist_dup(mpd_entity_get_stored_playlist(*entity));
+		*spl = mpd_playlist_dup(mpd_entity_get_playlist(*entity));
 		if (*spl == NULL)
 			lua_pushnil(L);
 	}
@@ -127,7 +127,7 @@ void linit_entity(lua_State *L)
 	lua_pushinteger(L, MPD_ENTITY_TYPE_SONG);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ENTITY_TYPE_PLAYLISTFILE");
-	lua_pushinteger(L, MPD_ENTITY_TYPE_PLAYLISTFILE);
+	lua_pushliteral(L, "MPD_ENTITY_TYPE_PLAYLIST");
+	lua_pushinteger(L, MPD_ENTITY_TYPE_PLAYLIST);
 	lua_settable(L, -3);
 }

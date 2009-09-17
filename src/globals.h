@@ -41,9 +41,9 @@
 #define MPD_ENTITY_T		"MpdClient.Entity"
 #define MPD_OUTPUT_T		"MpdClient.Output"
 #define MPD_PAIR_T		"MpdClient.Pair"
+#define MPD_PLAYLIST_T		"MpdClient.Playlist"
 #define MPD_SONG_T		"MpdClient.Song"
 #define MPD_STATUS_T		"MpdClient.Status"
-#define MPD_STORED_PLAYLIST_T	"MpdClient.StoredPlaylist"
 
 void linit_connection(lua_State *L);
 void linit_directory(lua_State *L);
@@ -52,10 +52,10 @@ void linit_error(lua_State *L);
 void linit_idle(lua_State *L);
 void linit_output(lua_State *L);
 void linit_pair(lua_State *L);
+void linit_playlist(lua_State *L);
 void linit_protocol(lua_State *L);
 void linit_song(lua_State *L);
 void linit_status(lua_State *L);
-void linit_stored_playlist(lua_State *L);
 
 /* Helper functions */
 #if 0

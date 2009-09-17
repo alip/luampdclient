@@ -37,6 +37,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
+#include <mpd/audio_format.h>
 #include <mpd/status.h>
 
 #include "globals.h"
@@ -57,6 +58,7 @@ static int lmpdstatus_gc(lua_State *L)
 static int lmpdstatus_index(lua_State *L)
 {
 	const char *key;
+	const struct mpd_audio_format *audio_format;
 	struct mpd_status **status;
 
 	status = luaL_checkudata(L, 1, MPD_STATUS_T);
@@ -88,6 +90,10 @@ static int lmpdstatus_index(lua_State *L)
 		lua_pushnumber(L, mpd_status_get_playlist_length(*status));
 		return 1;
 	}
+	else if (strncmp(key, "playlist_version", 17) == 0) {
+		lua_pushnumber(L, mpd_status_get_playlist_version(*status));
+		return 1;
+	}
 	else if (strncmp(key, "state", 6) == 0) {
 		lua_pushinteger(L, mpd_status_get_state(*status));
 		return 1;
@@ -96,12 +102,12 @@ static int lmpdstatus_index(lua_State *L)
 		lua_pushinteger(L, mpd_status_get_crossfade(*status));
 		return 1;
 	}
-	else if (strncmp(key, "song", 5) == 0) {
-		lua_pushinteger(L, mpd_status_get_song(*status));
+	else if (strncmp(key, "song_pos", 5) == 0) {
+		lua_pushinteger(L, mpd_status_get_song_pos(*status));
 		return 1;
 	}
-	else if (strncmp(key, "songid", 7) == 0) {
-		lua_pushinteger(L, mpd_status_get_songid(*status));
+	else if (strncmp(key, "song_id", 7) == 0) {
+		lua_pushinteger(L, mpd_status_get_song_id(*status));
 		return 1;
 	}
 	else if (strncmp(key, "elapsed_time", 13) == 0) {
@@ -112,24 +118,27 @@ static int lmpdstatus_index(lua_State *L)
 		lua_pushinteger(L, mpd_status_get_total_time(*status));
 		return 1;
 	}
-	else if (strncmp(key, "bit_rate", 9) == 0) {
-		lua_pushinteger(L, mpd_status_get_bit_rate(*status));
+	else if (strncmp(key, "kbit_rate", 10) == 0) {
+		lua_pushinteger(L, mpd_status_get_kbit_rate(*status));
 		return 1;
 	}
-	else if (strncmp(key, "sample_rate", 12) == 0) {
-		lua_pushinteger(L, mpd_status_get_sample_rate(*status));
+	else if (strncmp(key, "audio_format", 13) == 0) {
+		audio_format = mpd_status_get_audio_format(*status);
+		lua_newtable(L);
+
+		lua_pushinteger(L, audio_format->sample_rate);
+		lua_setfield(L, -2, "sample_rate");
+
+		lua_pushinteger(L, audio_format->bits);
+		lua_setfield(L, -2, "bits");
+
+		lua_pushinteger(L, audio_format->channels);
+		lua_setfield(L, -2, "channels");
+
 		return 1;
 	}
-	else if (strncmp(key, "bits", 5) == 0) {
-		lua_pushinteger(L, mpd_status_get_bits(*status));
-		return 1;
-	}
-	else if (strncmp(key, "channels", 9) == 0) {
-		lua_pushinteger(L, mpd_status_get_channels(*status));
-		return 1;
-	}
-	else if (strncmp(key, "updatingdb", 11) == 0) {
-		lua_pushinteger(L, mpd_status_get_updatingdb(*status));
+	else if (strncmp(key, "update_id", 11) == 0) {
+		lua_pushinteger(L, mpd_status_get_update_id(*status));
 		return 1;
 	}
 	else if (strncmp(key, "error", 6) == 0) {

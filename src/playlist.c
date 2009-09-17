@@ -37,38 +37,38 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include <mpd/stored_playlist.h>
+#include <mpd/playlist.h>
 
 #include "globals.h"
 
-static int lmpdstored_playlist_gc(lua_State *L)
+static int lmpdplaylist_gc(lua_State *L)
 {
-	struct mpd_stored_playlist **spl;
+	struct mpd_playlist **pl;
 
-	spl = luaL_checkudata(L, 1, MPD_STORED_PLAYLIST_T);
+	pl = luaL_checkudata(L, 1, MPD_PLAYLIST_T);
 
-	if (*spl != NULL)
-		mpd_stored_playlist_free(*spl);
-	*spl = NULL;
+	if (*pl != NULL)
+		mpd_playlist_free(*pl);
+	*pl = NULL;
 
 	return 0;
 }
 
-static int lmpdstored_playlist_dup(lua_State *L)
+static int lmpdplaylist_dup(lua_State *L)
 {
-	struct mpd_stored_playlist **spl;
-	struct mpd_stored_playlist **newspl;
+	struct mpd_playlist **pl;
+	struct mpd_playlist **newpl;
 
-	spl = luaL_checkudata(L, 1, MPD_STORED_PLAYLIST_T);
+	pl = luaL_checkudata(L, 1, MPD_PLAYLIST_T);
 
-	assert(*spl != NULL);
+	assert(*pl != NULL);
 
-	newspl = (struct mpd_stored_playlist **) lua_newuserdata(L, sizeof(struct mpd_stored_playlist *));
-	luaL_getmetatable(L, MPD_STORED_PLAYLIST_T);
+	newpl = (struct mpd_playlist **) lua_newuserdata(L, sizeof(struct mpd_playlist *));
+	luaL_getmetatable(L, MPD_PLAYLIST_T);
 	lua_setmetatable(L, -2);
 
-	*newspl = mpd_stored_playlist_dup(*spl);
-	if (*newspl == NULL) {
+	*newpl = mpd_playlist_dup(*pl);
+	if (*newpl == NULL) {
 		/* Push nil and error message */
 		lua_pushnil(L);
 		lua_pushliteral(L, "out of memory");
@@ -78,23 +78,23 @@ static int lmpdstored_playlist_dup(lua_State *L)
 	return 1;
 }
 
-static int lmpdstored_playlist_index(lua_State *L)
+static int lmpdplaylist_index(lua_State *L)
 {
 	const char *key;
-	struct mpd_stored_playlist **spl;
+	struct mpd_playlist **pl;
 
-	spl = luaL_checkudata(L, 1, MPD_STORED_PLAYLIST_T);
+	pl = luaL_checkudata(L, 1, MPD_PLAYLIST_T);
 	key = luaL_checkstring(L, 2);
 
-	assert(*spl != NULL);
+	assert(*pl != NULL);
 
 	if (strncmp(key, "dup", 4) == 0) {
-		lua_pushcfunction(L, lmpdstored_playlist_dup);
+		lua_pushcfunction(L, lmpdplaylist_dup);
 		return 1;
 	}
 	else if (strncmp(key, "path", 5) == 0) {
-		if (mpd_stored_playlist_get_path(*spl) != NULL)
-			lua_pushstring(L, mpd_stored_playlist_get_path(*spl));
+		if (mpd_playlist_get_path(*pl) != NULL)
+			lua_pushstring(L, mpd_playlist_get_path(*pl));
 		else
 			lua_pushnil(L);
 		return 1;
@@ -103,16 +103,17 @@ static int lmpdstored_playlist_index(lua_State *L)
 		return luaL_error(L, "Invalid key `%s'", key);
 }
 
-static const luaL_reg lreg_stored_playlist[] = {
-	{"__gc",	lmpdstored_playlist_gc},
-	{"__index",	lmpdstored_playlist_index},
+static const luaL_reg lreg_playlist[] = {
+	{"__gc",	lmpdplaylist_gc},
+	{"__index",	lmpdplaylist_index},
 	{NULL,		NULL},
 };
 
-void linit_stored_playlist(lua_State *L)
+void linit_playlist(lua_State *L)
 {
 	/* Register MPD_STORED_PLAYLIST_T metatable */
-	luaL_newmetatable(L, MPD_STORED_PLAYLIST_T);
-	luaL_register(L, NULL, lreg_stored_playlist);
+	luaL_newmetatable(L, MPD_PLAYLIST_T);
+	luaL_register(L, NULL, lreg_playlist);
 	lua_pop(L, 1);
 }
+

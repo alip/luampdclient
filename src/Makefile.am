@@ -8,6 +8,6 @@ mpdclient_la_SOURCES= \
 			  globals.h \
 			  connection.c directory.c entity.c \
 			  error.c idle.c output.c pair.c protocol.c \
-			  status.c song.c stored_playlist.c mpdclient.c
+			  status.c song.c playlist.c mpdclient.c
 mpdclient_la_LDFLAGS = -module -avoid-version
 mpdclient_la_LIBADD= $(lua_LIBS) $(libmpdclient_LIBS)

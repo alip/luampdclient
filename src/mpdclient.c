@@ -110,10 +110,10 @@ LUALIB_API int luaopen_mpdclient(lua_State *L)
 	linit_idle(L);
 	linit_output(L);
 	linit_pair(L);
+	linit_playlist(L);
 	linit_protocol(L);
 	linit_song(L);
 	linit_status(L);
-	linit_stored_playlist(L);
 
 	return 1;
 }

@@ -140,6 +140,10 @@ static int lmpdsong_index(lua_State *L)
 		lua_pushcfunction(L, lmpdsong_dup);
 		return 1;
 	}
+	else if (strncmp(key, "duration", 5) == 0) {
+		lua_pushinteger(L, mpd_song_get_duration(*song));
+		return 1;
+	}
 	else if (strncmp(key, "add_tag", 8) == 0) {
 		lua_pushcfunction(L, lmpdsong_add_tag);
 		return 1;
@@ -154,10 +158,6 @@ static int lmpdsong_index(lua_State *L)
 	}
 	else if (strncmp(key, "uri", 4) == 0) {
 		lua_pushstring(L, mpd_song_get_uri(*song));
-		return 1;
-	}
-	else if (strncmp(key, "time", 5) == 0) {
-		lua_pushinteger(L, mpd_song_get_time(*song));
 		return 1;
 	}
 	else if (strncmp(key, "pos", 4) == 0) {
@@ -184,8 +184,8 @@ static int lmpdsong_newindex(lua_State *L)
 
 	assert(*song != NULL);
 
-	if (strncmp(key, "time", 5) == 0)
-		mpd_song_set_time(*song, value);
+	if (strncmp(key, "duration", 5) == 0)
+		mpd_song_set_duration(*song, value);
 	else if (strncmp(key, "pos", 4) == 0)
 		mpd_song_set_pos(*song, value);
 	else if (strncmp(key, "id", 3) == 0)
@@ -209,18 +209,6 @@ void linit_song(lua_State *L)
 	luaL_newmetatable(L, MPD_SONG_T);
 	luaL_register(L, NULL, lreg_song);
 	lua_pop(L, 1);
-
-	lua_pushliteral(L, "MPD_SONG_NO_TIME");
-	lua_pushinteger(L, MPD_SONG_NO_TIME);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_SONG_NO_NUM");
-	lua_pushinteger(L, MPD_SONG_NO_NUM);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_SONG_NO_ID");
-	lua_pushinteger(L, MPD_SONG_NO_ID);
-	lua_settable(L, -3);
 
 	lua_pushliteral(L, "MPD_TAG_ANY");
 	lua_pushinteger(L, MPD_TAG_ANY);
