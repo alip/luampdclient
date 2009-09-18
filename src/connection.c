@@ -581,7 +581,7 @@ static int lmpdconn_run_password(lua_State *L)
 }
 
 /* player.h */
-static int lmpdconn_send_currentsong(lua_State *L)
+static int lmpdconn_send_current_song(lua_State *L)
 {
 	struct mpd_connection **conn;
 
@@ -589,12 +589,12 @@ static int lmpdconn_send_currentsong(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_currentsong(*conn));
+	lua_pushboolean(L, mpd_send_current_song(*conn));
 
 	return 1;
 }
 
-static int lmpdconn_run_currentsong(lua_State *L)
+static int lmpdconn_run_current_song(lua_State *L)
 {
 	struct mpd_song **song;
 	struct mpd_connection **conn;
@@ -607,7 +607,7 @@ static int lmpdconn_run_currentsong(lua_State *L)
 	luaL_getmetatable(L, MPD_SONG_T);
 	lua_setmetatable(L, -2);
 
-	*song = mpd_run_currentsong(*conn);
+	*song = mpd_run_current_song(*conn);
 
 	return 1;
 }
@@ -638,7 +638,7 @@ static int lmpdconn_run_play(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_send_playpos(lua_State *L)
+static int lmpdconn_send_play_pos(lua_State *L)
 {
 	int song_pos;
 	struct mpd_connection **conn;
@@ -648,12 +648,12 @@ static int lmpdconn_send_playpos(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_playpos(*conn, song_pos));
+	lua_pushboolean(L, mpd_send_play_pos(*conn, song_pos));
 
 	return 1;
 }
 
-static int lmpdconn_run_playpos(lua_State *L)
+static int lmpdconn_run_play_pos(lua_State *L)
 {
 	int song_pos;
 	struct mpd_connection **conn;
@@ -663,12 +663,12 @@ static int lmpdconn_run_playpos(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_playpos(*conn, song_pos));
+	lua_pushboolean(L, mpd_run_play_pos(*conn, song_pos));
 
 	return 1;
 }
 
-static int lmpdconn_send_playid(lua_State *L)
+static int lmpdconn_send_play_id(lua_State *L)
 {
 	int id;
 	struct mpd_connection **conn;
@@ -678,12 +678,12 @@ static int lmpdconn_send_playid(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_playid(*conn, id));
+	lua_pushboolean(L, mpd_send_play_id(*conn, id));
 
 	return 1;
 }
 
-static int lmpdconn_run_playid(lua_State *L)
+static int lmpdconn_run_play_id(lua_State *L)
 {
 	int song_id;
 	struct mpd_connection **conn;
@@ -693,7 +693,7 @@ static int lmpdconn_run_playid(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_playid(*conn, song_id));
+	lua_pushboolean(L, mpd_run_play_id(*conn, song_id));
 
 	return 1;
 }
@@ -832,7 +832,7 @@ static int lmpdconn_run_previous(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_send_seekpos(lua_State *L)
+static int lmpdconn_send_seek_pos(lua_State *L)
 {
 	int song_pos, time;
 	struct mpd_connection **conn;
@@ -843,12 +843,12 @@ static int lmpdconn_send_seekpos(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_seekpos(*conn, song_pos, time));
+	lua_pushboolean(L, mpd_send_seek_pos(*conn, song_pos, time));
 
 	return 1;
 }
 
-static int lmpdconn_run_seekpos(lua_State *L)
+static int lmpdconn_run_seek_pos(lua_State *L)
 {
 	int song_pos, time;
 	struct mpd_connection **conn;
@@ -859,12 +859,12 @@ static int lmpdconn_run_seekpos(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_seekpos(*conn, song_pos, time));
+	lua_pushboolean(L, mpd_run_seek_pos(*conn, song_pos, time));
 
 	return 1;
 }
 
-static int lmpdconn_send_seekid(lua_State *L)
+static int lmpdconn_send_seek_id(lua_State *L)
 {
 	int id, time;
 	struct mpd_connection **conn;
@@ -875,12 +875,12 @@ static int lmpdconn_send_seekid(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_seekid(*conn, id, time));
+	lua_pushboolean(L, mpd_send_seek_id(*conn, id, time));
 
 	return 1;
 }
 
-static int lmpdconn_run_seekid(lua_State *L)
+static int lmpdconn_run_seek_id(lua_State *L)
 {
 	int id, time;
 	struct mpd_connection **conn;
@@ -891,7 +891,7 @@ static int lmpdconn_run_seekid(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_seekid(*conn, id, time));
+	lua_pushboolean(L, mpd_run_seek_id(*conn, id, time));
 
 	return 1;
 }
@@ -2008,14 +2008,14 @@ static const luaL_reg lreg_connection[] = {
 	{"send_password",		lmpdconn_send_password},
 	{"run_password",		lmpdconn_run_password},
 	/* player.h */
-	{"send_currentsong",		lmpdconn_send_currentsong},
-	{"run_currentsong",		lmpdconn_run_currentsong},
+	{"send_current_song",		lmpdconn_send_current_song},
+	{"run_current_song",		lmpdconn_run_current_song},
 	{"send_play",			lmpdconn_send_play},
 	{"run_play",			lmpdconn_run_play},
-	{"send_playpos",		lmpdconn_send_playpos},
-	{"run_playpos",			lmpdconn_run_playpos},
-	{"send_playid",			lmpdconn_send_playid},
-	{"run_playid",			lmpdconn_run_playid},
+	{"send_play_pos",		lmpdconn_send_play_pos},
+	{"run_play_pos",		lmpdconn_run_play_pos},
+	{"send_play_id",		lmpdconn_send_play_id},
+	{"run_play_id",			lmpdconn_run_play_id},
 	{"send_stop",			lmpdconn_send_stop},
 	{"run_stop",			lmpdconn_run_stop},
 	{"send_toggle_pause",		lmpdconn_send_toggle_pause},
@@ -2026,10 +2026,10 @@ static const luaL_reg lreg_connection[] = {
 	{"run_next",			lmpdconn_run_next},
 	{"send_previous",		lmpdconn_send_previous},
 	{"run_previous",		lmpdconn_run_previous},
-	{"send_seekpos",		lmpdconn_send_seekpos},
-	{"run_seekpos",			lmpdconn_run_seekpos},
-	{"send_seekid",			lmpdconn_send_seekid},
-	{"run_seekid",			lmpdconn_run_seekid},
+	{"send_seek_pos",		lmpdconn_send_seek_pos},
+	{"run_seek_pos",		lmpdconn_run_seek_pos},
+	{"send_seek_id",		lmpdconn_send_seek_id},
+	{"run_seek_id",			lmpdconn_run_seek_id},
 	{"send_repeat",			lmpdconn_send_repeat},
 	{"run_repeat",			lmpdconn_run_repeat},
 	{"send_random",			lmpdconn_send_random},
