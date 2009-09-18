@@ -180,22 +180,6 @@ static int lmpdconn_send_setvol(lua_State *L)
 	return 1;
 }
 
-/* WARNING: this function is deprecated */
-static int lmpdconn_send_volume(lua_State *L)
-{
-	int change;
-	struct mpd_connection **conn;
-
-	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
-	change = luaL_checkinteger(L, 2);
-
-	assert(*conn != NULL);
-
-	lua_pushboolean(L, mpd_send_volume(*conn, change));
-
-	return 1;
-}
-
 static int lmpdconn_send_commands(lua_State *L)
 {
 	struct mpd_connection **conn;
@@ -1974,7 +1958,6 @@ static const luaL_reg lreg_connection[] = {
 	{"cmp_server_version",		lmpdconn_cmp_server_version},
 	/* command.h */
 	{"send_setvol",			lmpdconn_send_setvol},
-	{"send_volume",			lmpdconn_send_volume},
 	{"send_commands",		lmpdconn_send_commands},
 	{"send_notcommands",		lmpdconn_send_notcommands},
 	{"send_urlhandlers",		lmpdconn_send_urlhandlers},
