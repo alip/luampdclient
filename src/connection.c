@@ -1065,7 +1065,7 @@ static int lmpdconn_recv_playlist(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_send_listplaylist(lua_State *L)
+static int lmpdconn_send_list_playlist(lua_State *L)
 {
 	const char *name;
 	struct mpd_connection **conn;
@@ -1075,12 +1075,12 @@ static int lmpdconn_send_listplaylist(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_listplaylist(*conn, name));
+	lua_pushboolean(L, mpd_send_list_playlist(*conn, name));
 
 	return 1;
 }
 
-static int lmpdconn_send_listplaylistinfo(lua_State *L)
+static int lmpdconn_send_list_playlist_meta(lua_State *L)
 {
 	const char *name;
 	struct mpd_connection **conn;
@@ -1090,12 +1090,12 @@ static int lmpdconn_send_listplaylistinfo(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_listplaylistinfo(*conn, name));
+	lua_pushboolean(L, mpd_send_list_playlist_meta(*conn, name));
 
 	return 1;
 }
 
-static int lmpdconn_send_playlistclear(lua_State *L)
+static int lmpdconn_send_playlist_clear(lua_State *L)
 {
 	const char *name;
 	struct mpd_connection **conn;
@@ -1105,12 +1105,12 @@ static int lmpdconn_send_playlistclear(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_playlistclear(*conn, name));
+	lua_pushboolean(L, mpd_send_playlist_clear(*conn, name));
 
 	return 1;
 }
 
-static int lmpdconn_run_playlistclear(lua_State *L)
+static int lmpdconn_run_playlist_clear(lua_State *L)
 {
 	const char *name;
 	struct mpd_connection **conn;
@@ -1120,12 +1120,12 @@ static int lmpdconn_run_playlistclear(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_playlistclear(*conn, name));
+	lua_pushboolean(L, mpd_run_playlist_clear(*conn, name));
 
 	return 1;
 }
 
-static int lmpdconn_send_playlistadd(lua_State *L)
+static int lmpdconn_send_playlist_add(lua_State *L)
 {
 	const char *name, *path;
 	struct mpd_connection **conn;
@@ -1136,12 +1136,12 @@ static int lmpdconn_send_playlistadd(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_playlistadd(*conn, name, path));
+	lua_pushboolean(L, mpd_send_playlist_add(*conn, name, path));
 
 	return 1;
 }
 
-static int lmpdconn_run_playlistadd(lua_State *L)
+static int lmpdconn_run_playlist_add(lua_State *L)
 {
 	const char *name, *path;
 	struct mpd_connection **conn;
@@ -1152,12 +1152,12 @@ static int lmpdconn_run_playlistadd(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_playlistadd(*conn, name, path));
+	lua_pushboolean(L, mpd_run_playlist_add(*conn, name, path));
 
 	return 1;
 }
 
-static int lmpdconn_send_playlistmove(lua_State *L)
+static int lmpdconn_send_playlist_move(lua_State *L)
 {
 	int from, to;
 	const char *name;
@@ -1170,12 +1170,12 @@ static int lmpdconn_send_playlistmove(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_playlistmove(*conn, name, from, to));
+	lua_pushboolean(L, mpd_send_playlist_move(*conn, name, from, to));
 
 	return 1;
 }
 
-static int lmpdconn_send_playlistdelete(lua_State *L)
+static int lmpdconn_send_playlist_delete(lua_State *L)
 {
 	int pos;
 	const char *name;
@@ -1187,12 +1187,12 @@ static int lmpdconn_send_playlistdelete(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_playlistdelete(*conn, name, pos));
+	lua_pushboolean(L, mpd_send_playlist_delete(*conn, name, pos));
 
 	return 1;
 }
 
-static int lmpdconn_run_playlistdelete(lua_State *L)
+static int lmpdconn_run_playlist_delete(lua_State *L)
 {
 	int pos;
 	const char *name;
@@ -1204,7 +1204,7 @@ static int lmpdconn_run_playlistdelete(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_run_playlistdelete(*conn, name, pos));
+	lua_pushboolean(L, mpd_run_playlist_delete(*conn, name, pos));
 
 	return 1;
 }
@@ -2042,15 +2042,15 @@ static const luaL_reg lreg_connection[] = {
 	{"run_crossfade",		lmpdconn_run_crossfade},
 	/* playlist.h */
 	{"recv_playlist",		lmpdconn_recv_playlist},
-	{"send_listplaylist",		lmpdconn_send_listplaylist},
-	{"send_listplaylistinfo",	lmpdconn_send_listplaylistinfo},
-	{"send_playlistclear",		lmpdconn_send_playlistclear},
-	{"run_playlistclear",		lmpdconn_run_playlistclear},
-	{"send_playlistadd",		lmpdconn_send_playlistadd},
-	{"run_playlistadd",		lmpdconn_run_playlistadd},
-	{"send_playlistmove",		lmpdconn_send_playlistmove},
-	{"send_playlistdelete",		lmpdconn_send_playlistdelete},
-	{"run_playlistdelete",		lmpdconn_run_playlistdelete},
+	{"send_list_playlist",		lmpdconn_send_list_playlist},
+	{"send_list_playlist_meta",	lmpdconn_send_list_playlist_meta},
+	{"send_playlist_clear",		lmpdconn_send_playlist_clear},
+	{"run_playlist_clear",		lmpdconn_run_playlist_clear},
+	{"send_playlist_add",		lmpdconn_send_playlist_add},
+	{"run_playlist_add",		lmpdconn_run_playlist_add},
+	{"send_playlist_move",		lmpdconn_send_playlist_move},
+	{"send_playlist_delete",	lmpdconn_send_playlist_delete},
+	{"run_playlist_delete",		lmpdconn_run_playlist_delete},
 	{"send_save",			lmpdconn_send_save},
 	{"run_save",			lmpdconn_run_save},
 	{"send_load",			lmpdconn_send_load},
