@@ -275,7 +275,7 @@ static int lmpdconn_recv_cpos(lua_State *L)
 }
 
 /* database.h */
-static int lmpdconn_send_listall(lua_State *L)
+static int lmpdconn_send_list_all(lua_State *L)
 {
 	const char *dir;
 	struct mpd_connection **conn;
@@ -285,12 +285,12 @@ static int lmpdconn_send_listall(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_listall(*conn, dir));
+	lua_pushboolean(L, mpd_send_list_all(*conn, dir));
 
 	return 1;
 }
 
-static int lmpdconn_send_listallinfo(lua_State *L)
+static int lmpdconn_send_list_all_meta(lua_State *L)
 {
 	const char *dir;
 	struct mpd_connection **conn;
@@ -300,12 +300,12 @@ static int lmpdconn_send_listallinfo(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_listallinfo(*conn, dir));
+	lua_pushboolean(L, mpd_send_list_all_meta(*conn, dir));
 
 	return 1;
 }
 
-static int lmpdconn_send_lsinfo(lua_State *L)
+static int lmpdconn_send_ls_meta(lua_State *L)
 {
 	const char *dir;
 	struct mpd_connection **conn;
@@ -315,7 +315,7 @@ static int lmpdconn_send_lsinfo(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_lsinfo(*conn, dir));
+	lua_pushboolean(L, mpd_send_ls_meta(*conn, dir));
 
 	return 1;
 }
@@ -1982,9 +1982,9 @@ static const luaL_reg lreg_connection[] = {
 	/* cpos.h */
 	{"recv_cpos",			lmpdconn_recv_cpos},
 	/* database.h */
-	{"send_listall",		lmpdconn_send_listall},
-	{"send_listallinfo",		lmpdconn_send_listallinfo},
-	{"send_lsinfo",			lmpdconn_send_lsinfo},
+	{"send_list_all",		lmpdconn_send_list_all},
+	{"send_list_all_meta",		lmpdconn_send_list_all_meta},
+	{"send_ls_meta",		lmpdconn_send_ls_meta},
 	{"send_update",			lmpdconn_send_update},
 	{"recv_update_id",		lmpdconn_recv_update_id},
 	{"run_update",			lmpdconn_run_update},
