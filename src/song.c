@@ -214,8 +214,8 @@ void linit_song(lua_State *L)
 	lua_pushinteger(L, MPD_TAG_ANY);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_TAG_FILENAME");
-	lua_pushinteger(L, MPD_TAG_FILENAME);
+	lua_pushliteral(L, "MPD_TAG_FILE");
+	lua_pushinteger(L, MPD_TAG_FILE);
 	lua_settable(L, -3);
 
 	lua_pushliteral(L, "MPD_TAG_ARTIST");
