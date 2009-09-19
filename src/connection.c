@@ -45,6 +45,7 @@
 #include <mpd/entity.h>
 #include <mpd/idle.h>
 #include <mpd/list.h>
+#include <mpd/mixer.h>
 #include <mpd/output.h>
 #include <mpd/pair.h>
 #include <mpd/response.h>
@@ -165,21 +166,6 @@ static int lmpdconn_cmp_server_version(lua_State *L)
 }
 
 /* command.h */
-static int lmpdconn_send_setvol(lua_State *L)
-{
-	int change;
-	struct mpd_connection **conn;
-
-	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
-	change = luaL_checkinteger(L, 2);
-
-	assert(*conn != NULL);
-
-	lua_pushboolean(L, mpd_send_setvol(*conn, change));
-
-	return 1;
-}
-
 static int lmpdconn_send_commands(lua_State *L)
 {
 	struct mpd_connection **conn;
@@ -432,6 +418,22 @@ static int lmpdconn_command_list_end(lua_State *L)
 	assert(*conn != NULL);
 
 	lua_pushboolean(L, mpd_command_list_end(*conn));
+
+	return 1;
+}
+
+/* mixer.h */
+static int lmpdconn_send_setvol(lua_State *L)
+{
+	int change;
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	change = luaL_checkinteger(L, 2);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_send_setvol(*conn, change));
 
 	return 1;
 }
@@ -1957,7 +1959,6 @@ static const luaL_reg lreg_connection[] = {
 	{"get_server_version",		lmpdconn_get_server_version},
 	{"cmp_server_version",		lmpdconn_cmp_server_version},
 	/* command.h */
-	{"send_setvol",			lmpdconn_send_setvol},
 	{"send_commands",		lmpdconn_send_commands},
 	{"send_notcommands",		lmpdconn_send_notcommands},
 	{"send_urlhandlers",		lmpdconn_send_urlhandlers},
@@ -1980,6 +1981,8 @@ static const luaL_reg lreg_connection[] = {
 	/* list.h */
 	{"command_list_begin",		lmpdconn_command_list_begin},
 	{"command_list_end",		lmpdconn_command_list_end},
+	/* mixer.h */
+	{"send_setvol",			lmpdconn_send_setvol},
 	/* output.h */
 	{"recv_output",			lmpdconn_recv_output},
 	{"send_outputs",		lmpdconn_send_outputs},
