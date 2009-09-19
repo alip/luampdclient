@@ -40,7 +40,7 @@
 #include <lauxlib.h>
 
 #include <mpd/connection.h>
-#include <mpd/command.h>
+#include <mpd/capabilities.h>
 #include <mpd/cpos.h>
 #include <mpd/entity.h>
 #include <mpd/idle.h>
@@ -165,7 +165,7 @@ static int lmpdconn_cmp_server_version(lua_State *L)
 	return 1;
 }
 
-/* command.h */
+/* capabilities.h */
 static int lmpdconn_send_commands(lua_State *L)
 {
 	struct mpd_connection **conn;
@@ -1973,7 +1973,7 @@ static const luaL_reg lreg_connection[] = {
 	{"clear_error",			lmpdconn_clear_error},
 	{"get_server_version",		lmpdconn_get_server_version},
 	{"cmp_server_version",		lmpdconn_cmp_server_version},
-	/* command.h */
+	/* capabilities.h */
 	{"send_commands",		lmpdconn_send_commands},
 	{"send_notcommands",		lmpdconn_send_notcommands},
 	{"send_urlhandlers",		lmpdconn_send_urlhandlers},
