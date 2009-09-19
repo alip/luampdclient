@@ -48,8 +48,8 @@ void linit_error(lua_State *L)
 	lua_pushinteger(L, MPD_ERROR_OOM);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ERROR_ARG");
-	lua_pushinteger(L, MPD_ERROR_ARG);
+	lua_pushliteral(L, "MPD_ERROR_ARGUMENT");
+	lua_pushinteger(L, MPD_ERROR_ARGUMENT);
 	lua_settable(L, -3);
 
 	lua_pushliteral(L, "MPD_ERROR_STATE");
@@ -64,16 +64,8 @@ void linit_error(lua_State *L)
 	lua_pushinteger(L, MPD_ERROR_SYSTEM);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ERROR_UNKHOST");
-	lua_pushinteger(L, MPD_ERROR_UNKHOST);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_CONNPORT");
-	lua_pushinteger(L, MPD_ERROR_CONNPORT);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_NOTMPD");
-	lua_pushinteger(L, MPD_ERROR_NOTMPD);
+	lua_pushliteral(L, "MPD_ERROR_RESOLVER");
+	lua_pushinteger(L, MPD_ERROR_RESOLVER);
 	lua_settable(L, -3);
 
 	lua_pushliteral(L, "MPD_ERROR_SENDING");
@@ -84,8 +76,8 @@ void linit_error(lua_State *L)
 	lua_pushinteger(L, MPD_ERROR_MALFORMED);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ERROR_CONNCLOSED");
-	lua_pushinteger(L, MPD_ERROR_CONNCLOSED);
+	lua_pushliteral(L, "MPD_ERROR_CLOSED");
+	lua_pushinteger(L, MPD_ERROR_CLOSED);
 	lua_settable(L, -3);
 
 	lua_pushliteral(L, "MPD_ERROR_ACK");
