@@ -366,6 +366,19 @@ static int lmpdconn_recv_idle(lua_State *L)
 	return 1;
 }
 
+static int lmpdconn_run_idle(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	lua_pushinteger(L, mpd_run_idle(*conn));
+
+	return 1;
+}
+
 /* list.h */
 static int lmpdconn_command_list_begin(lua_State *L)
 {
@@ -1989,6 +2002,7 @@ static const luaL_reg lreg_connection[] = {
 	{"send_idle",			lmpdconn_send_idle},
 	{"send_noidle",			lmpdconn_send_noidle},
 	{"recv_idle",			lmpdconn_recv_idle},
+	{"run_idle",			lmpdconn_run_idle},
 	/* list.h */
 	{"command_list_begin",		lmpdconn_command_list_begin},
 	{"command_list_end",		lmpdconn_command_list_end},
