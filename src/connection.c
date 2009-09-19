@@ -438,6 +438,21 @@ static int lmpdconn_send_set_volume(lua_State *L)
 	return 1;
 }
 
+static int lmpdconn_run_set_volume(lua_State *L)
+{
+	int change;
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	change = luaL_checkinteger(L, 2);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_run_set_volume(*conn, change));
+
+	return 1;
+}
+
 /* output.h */
 static int lmpdconn_recv_output(lua_State *L)
 {
@@ -1983,6 +1998,7 @@ static const luaL_reg lreg_connection[] = {
 	{"command_list_end",		lmpdconn_command_list_end},
 	/* mixer.h */
 	{"send_set_volume",		lmpdconn_send_set_volume},
+	{"run_set_volume",		lmpdconn_run_set_volume},
 	/* output.h */
 	{"recv_output",			lmpdconn_recv_output},
 	{"send_outputs",		lmpdconn_send_outputs},
