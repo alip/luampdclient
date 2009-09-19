@@ -1362,7 +1362,7 @@ static int lmpdconn_send_get_queue_song_id(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_send_plchanges(lua_State *L)
+static int lmpdconn_send_queue_changes_meta(lua_State *L)
 {
 	double playlist;
 	struct mpd_connection **conn;
@@ -1372,12 +1372,12 @@ static int lmpdconn_send_plchanges(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_plchanges(*conn, playlist));
+	lua_pushboolean(L, mpd_send_queue_changes_meta(*conn, playlist));
 
 	return 1;
 }
 
-static int lmpdconn_send_plchangesposid(lua_State *L)
+static int lmpdconn_send_queue_changes_brief(lua_State *L)
 {
 	double playlist;
 	struct mpd_connection **conn;
@@ -1387,12 +1387,12 @@ static int lmpdconn_send_plchangesposid(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_plchangesposid(*conn, playlist));
+	lua_pushboolean(L, mpd_send_queue_changes_brief(*conn, playlist));
 
 	return 1;
 }
 
-static int lmpdconn_recv_cpos(lua_State *L)
+static int lmpdconn_recv_queue_change_brief(lua_State *L)
 {
 	struct mpd_cpos cpos;
 	struct mpd_connection **conn;
@@ -1412,7 +1412,7 @@ static int lmpdconn_recv_cpos(lua_State *L)
 	cpos.id = luaL_checkinteger(L, -1);
 	lua_pop(L, 1);
 
-	lua_pushboolean(L, mpd_recv_cpos(*conn, &cpos));
+	lua_pushboolean(L, mpd_recv_queue_change_brief(*conn, &cpos));
 
 	return 1;
 }
@@ -2075,9 +2075,9 @@ static const luaL_reg lreg_connection[] = {
 	{"send_list_queue_meta",	lmpdconn_send_list_queue_meta},
 	{"send_get_queue_song_pos",	lmpdconn_send_get_queue_song_pos},
 	{"send_get_queue_song_id",	lmpdconn_send_get_queue_song_id},
-	{"send_plchanges",		lmpdconn_send_plchanges},
-	{"send_plchangesposid",		lmpdconn_send_plchangesposid},
-	{"recv_cpos",			lmpdconn_recv_cpos},
+	{"send_queue_changes_meta",	lmpdconn_send_queue_changes_meta},
+	{"send_queue_changes_brief",	lmpdconn_send_queue_changes_brief},
+	{"recv_queue_change_brief",	lmpdconn_recv_queue_change_brief},
 	{"send_add",			lmpdconn_send_add},
 	{"send_add_id",			lmpdconn_send_add_id},
 	{"recv_song_id",		lmpdconn_recv_song_id},
