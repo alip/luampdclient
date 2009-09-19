@@ -41,7 +41,6 @@
 
 #include <mpd/connection.h>
 #include <mpd/capabilities.h>
-#include <mpd/cpos.h>
 #include <mpd/entity.h>
 #include <mpd/idle.h>
 #include <mpd/list.h>
@@ -214,32 +213,6 @@ static int lmpdconn_send_list_tag_types(lua_State *L)
 	assert(*conn != NULL);
 
 	lua_pushboolean(L, mpd_send_list_tag_types(*conn));
-
-	return 1;
-}
-
-/* cpos.h */
-static int lmpdconn_recv_cpos(lua_State *L)
-{
-	struct mpd_cpos cpos;
-	struct mpd_connection **conn;
-
-	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
-	luaL_checktype(L, 2, LUA_TTABLE);
-
-	assert(*conn != NULL);
-
-	lua_pushliteral(L, "position");
-	lua_gettable(L, -2);
-	cpos.position = luaL_checkinteger(L, -1);
-	lua_pop(L, 1);
-
-	lua_pushliteral(L, "id");
-	lua_gettable(L, -2);
-	cpos.id = luaL_checkinteger(L, -1);
-	lua_pop(L, 1);
-
-	lua_pushboolean(L, mpd_recv_cpos(*conn, &cpos));
 
 	return 1;
 }
@@ -1406,6 +1379,31 @@ static int lmpdconn_send_plchangesposid(lua_State *L)
 	return 1;
 }
 
+static int lmpdconn_recv_cpos(lua_State *L)
+{
+	struct mpd_cpos cpos;
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	luaL_checktype(L, 2, LUA_TTABLE);
+
+	assert(*conn != NULL);
+
+	lua_pushliteral(L, "position");
+	lua_gettable(L, -2);
+	cpos.position = luaL_checkinteger(L, -1);
+	lua_pop(L, 1);
+
+	lua_pushliteral(L, "id");
+	lua_gettable(L, -2);
+	cpos.id = luaL_checkinteger(L, -1);
+	lua_pop(L, 1);
+
+	lua_pushboolean(L, mpd_recv_cpos(*conn, &cpos));
+
+	return 1;
+}
+
 static int lmpdconn_send_add(lua_State *L)
 {
 	const char *file;
@@ -1978,8 +1976,6 @@ static const luaL_reg lreg_connection[] = {
 	{"send_disallowed_commands",	lmpdconn_send_disallowed_commands},
 	{"send_list_url_schemes",	lmpdconn_send_list_url_schemes},
 	{"send_list_tag_types",		lmpdconn_send_list_tag_types},
-	/* cpos.h */
-	{"recv_cpos",			lmpdconn_recv_cpos},
 	/* database.h */
 	{"send_list_all",		lmpdconn_send_list_all},
 	{"send_list_all_meta",		lmpdconn_send_list_all_meta},
@@ -2067,6 +2063,7 @@ static const luaL_reg lreg_connection[] = {
 	{"send_get_queue_song_id",	lmpdconn_send_get_queue_song_id},
 	{"send_plchanges",		lmpdconn_send_plchanges},
 	{"send_plchangesposid",		lmpdconn_send_plchangesposid},
+	{"recv_cpos",			lmpdconn_recv_cpos},
 	{"send_add",			lmpdconn_send_add},
 	{"send_add_id",			lmpdconn_send_add_id},
 	{"recv_song_id",		lmpdconn_recv_song_id},
