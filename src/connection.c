@@ -1394,27 +1394,25 @@ static int lmpdconn_send_queue_changes_brief(lua_State *L)
 
 static int lmpdconn_recv_queue_change_brief(lua_State *L)
 {
-	struct mpd_cpos cpos;
+	int position;
+	int id;
 	struct mpd_connection **conn;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
-	luaL_checktype(L, 2, LUA_TTABLE);
 
 	assert(*conn != NULL);
 
-	lua_pushliteral(L, "position");
-	lua_gettable(L, -2);
-	cpos.position = luaL_checkinteger(L, -1);
-	lua_pop(L, 1);
+	lua_pushboolean(L, mpd_recv_queue_change_brief(*conn, &position, &id));
 
-	lua_pushliteral(L, "id");
-	lua_gettable(L, -2);
-	cpos.id = luaL_checkinteger(L, -1);
-	lua_pop(L, 1);
+	lua_newtable(L);
 
-	lua_pushboolean(L, mpd_recv_queue_change_brief(*conn, &cpos));
+	lua_pushinteger(L, position);
+	lua_setfield(L, -2, "position");
 
-	return 1;
+	lua_pushinteger(L, id);
+	lua_setfield(L, -2, "id");
+
+	return 2;
 }
 
 static int lmpdconn_send_add(lua_State *L)
