@@ -166,7 +166,7 @@ static int lmpdconn_cmp_server_version(lua_State *L)
 }
 
 /* capabilities.h */
-static int lmpdconn_send_commands(lua_State *L)
+static int lmpdconn_send_allowed_commands(lua_State *L)
 {
 	struct mpd_connection **conn;
 
@@ -174,12 +174,12 @@ static int lmpdconn_send_commands(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_commands(*conn));
+	lua_pushboolean(L, mpd_send_allowed_commands(*conn));
 
 	return 1;
 }
 
-static int lmpdconn_send_notcommands(lua_State *L)
+static int lmpdconn_send_disallowed_commands(lua_State *L)
 {
 	struct mpd_connection **conn;
 
@@ -187,12 +187,12 @@ static int lmpdconn_send_notcommands(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_notcommands(*conn));
+	lua_pushboolean(L, mpd_send_disallowed_commands(*conn));
 
 	return 1;
 }
 
-static int lmpdconn_send_urlhandlers(lua_State *L)
+static int lmpdconn_send_list_url_schemes(lua_State *L)
 {
 	struct mpd_connection **conn;
 
@@ -200,12 +200,12 @@ static int lmpdconn_send_urlhandlers(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_urlhandlers(*conn));
+	lua_pushboolean(L, mpd_send_list_url_schemes(*conn));
 
 	return 1;
 }
 
-static int lmpdconn_send_tagtypes(lua_State *L)
+static int lmpdconn_send_list_tag_types(lua_State *L)
 {
 	struct mpd_connection **conn;
 
@@ -213,7 +213,7 @@ static int lmpdconn_send_tagtypes(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_tagtypes(*conn));
+	lua_pushboolean(L, mpd_send_list_tag_types(*conn));
 
 	return 1;
 }
@@ -1974,10 +1974,10 @@ static const luaL_reg lreg_connection[] = {
 	{"get_server_version",		lmpdconn_get_server_version},
 	{"cmp_server_version",		lmpdconn_cmp_server_version},
 	/* capabilities.h */
-	{"send_commands",		lmpdconn_send_commands},
-	{"send_notcommands",		lmpdconn_send_notcommands},
-	{"send_urlhandlers",		lmpdconn_send_urlhandlers},
-	{"send_tagtypes",		lmpdconn_send_tagtypes},
+	{"send_allowed_commands",	lmpdconn_send_allowed_commands},
+	{"send_disallowed_commands",	lmpdconn_send_disallowed_commands},
+	{"send_list_url_schemes",	lmpdconn_send_list_url_schemes},
+	{"send_list_tag_types",		lmpdconn_send_list_tag_types},
 	/* cpos.h */
 	{"recv_cpos",			lmpdconn_recv_cpos},
 	/* database.h */
