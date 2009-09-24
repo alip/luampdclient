@@ -70,31 +70,8 @@ static int mpdclient_new(lua_State *L)
 	return 1;
 }
 
-static int mpdclient_new_song(lua_State *L)
-{
-	const char *uri;
-	struct mpd_song **song;
-
-	uri = luaL_checkstring(L, 1);
-
-	song = (struct mpd_song **) lua_newuserdata(L, sizeof(struct mpd_song *));
-	luaL_getmetatable(L, MPD_SONG_T);
-	lua_setmetatable(L, -2);
-
-	*song = mpd_song_new(uri);
-	if (*song == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
-	}
-
-	return 1;
-}
-
 static const luaL_reg reg_global[] = {
 	{"new",		mpdclient_new},
-	{"new_song",	mpdclient_new_song},
 	{NULL,		NULL},
 };
 
