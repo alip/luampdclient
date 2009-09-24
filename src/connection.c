@@ -102,7 +102,7 @@ static int lmpdconn_get_error(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushinteger(L, mpd_get_error(*conn));
+	lua_pushinteger(L, mpd_connection_get_error(*conn));
 
 	return 1;
 }
@@ -115,7 +115,7 @@ static int lmpdconn_get_error_message(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushstring(L, mpd_get_error_message(*conn));
+	lua_pushstring(L, mpd_connection_get_error_message(*conn));
 
 	return 1;
 }
@@ -128,7 +128,7 @@ static int lmpdconn_get_server_error(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushinteger(L, mpd_get_server_error(*conn));
+	lua_pushinteger(L, mpd_connection_get_server_error(*conn));
 
 	return 1;
 }
@@ -141,7 +141,7 @@ static int lmpdconn_clear_error(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_clear_error(*conn));
+	lua_pushboolean(L, mpd_connection_clear_error(*conn));
 
 	return 1;
 }
@@ -154,9 +154,9 @@ static int lmpdconn_get_server_version(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushinteger(L, mpd_get_server_version(*conn)[0]);
-	lua_pushinteger(L, mpd_get_server_version(*conn)[1]);
-	lua_pushinteger(L, mpd_get_server_version(*conn)[2]);
+	lua_pushinteger(L, mpd_connection_get_server_version(*conn)[0]);
+	lua_pushinteger(L, mpd_connection_get_server_version(*conn)[1]);
+	lua_pushinteger(L, mpd_connection_get_server_version(*conn)[2]);
 
 	return 3;
 }
@@ -173,7 +173,7 @@ static int lmpdconn_cmp_server_version(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushinteger(L, mpd_cmp_server_version(*conn, major, minor, patch));
+	lua_pushinteger(L, mpd_connection_cmp_server_version(*conn, major, minor, patch));
 
 	return 1;
 }
