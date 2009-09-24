@@ -80,6 +80,20 @@ static int lmpdconn_set_timeout(lua_State *L)
 	return 0;
 }
 
+static int lmpdconn_get_fd(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	mpd_connection_get_fd(*conn);
+
+	lua_pushinteger(L, mpd_connection_get_fd(*conn));
+	return 1;
+}
+
 static int lmpdconn_get_error(lua_State *L)
 {
 	struct mpd_connection **conn;
@@ -1954,6 +1968,7 @@ static const luaL_reg lreg_connection[] = {
 	{"__gc",			lmpdconn_gc},
 	{"close",			lmpdconn_gc},
 	{"set_timeout",			lmpdconn_set_timeout},
+	{"get_fd",			lmpdconn_get_fd},
 	{"get_error",			lmpdconn_get_error},
 	{"get_error_message",		lmpdconn_get_error_message},
 	{"get_server_error",		lmpdconn_get_server_error},
