@@ -68,10 +68,6 @@ void linit_error(lua_State *L)
 	lua_pushinteger(L, MPD_ERROR_RESOLVER);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ERROR_SENDING");
-	lua_pushinteger(L, MPD_ERROR_SENDING);
-	lua_settable(L, -3);
-
 	lua_pushliteral(L, "MPD_ERROR_MALFORMED");
 	lua_pushinteger(L, MPD_ERROR_MALFORMED);
 	lua_settable(L, -3);
