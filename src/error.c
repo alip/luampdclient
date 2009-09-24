@@ -76,7 +76,7 @@ void linit_error(lua_State *L)
 	lua_pushinteger(L, MPD_ERROR_CLOSED);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ERROR_ACK");
-	lua_pushinteger(L, MPD_ERROR_ACK);
+	lua_pushliteral(L, "MPD_ERROR_SERVER");
+	lua_pushinteger(L, MPD_ERROR_SERVER);
 	lua_settable(L, -3);
 }
