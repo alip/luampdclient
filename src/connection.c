@@ -191,23 +191,22 @@ static int lmpdconn_send_disallowed_commands(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_recv_command_name(lua_State *L)
+static int lmpdconn_recv_command_pair(lua_State *L)
 {
-	char *command;
+	struct mpd_pair **pair;
 	struct mpd_connection **conn;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
 
 	assert(*conn != NULL);
 
-	command = mpd_recv_command_name(*conn);
-	if (command == NULL)
-		lua_pushnil(L);
-	else {
-		lua_pushstring(L, command);
-		free(command);
-	}
+	pair = (struct mpd_pair **) lua_newuserdata(L, sizeof(struct mpd_pair *));
+	luaL_getmetatable(L, MPD_PAIR_T);
+	lua_setmetatable(L, -2);
 
+	*pair = mpd_recv_command_pair(*conn);
+	if (*pair == NULL)
+		lua_pushnil(L);
 	return 1;
 }
 
@@ -224,23 +223,22 @@ static int lmpdconn_send_list_url_schemes(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_recv_handler(lua_State *L)
+static int lmpdconn_recv_url_scheme_pair(lua_State *L)
 {
-	char *handler;
+	struct mpd_pair **pair;
 	struct mpd_connection **conn;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
 
 	assert(*conn != NULL);
 
-	handler = mpd_recv_handler(*conn);
-	if (handler == NULL)
-		lua_pushnil(L);
-	else {
-		lua_pushstring(L, handler);
-		free(handler);
-	}
+	pair = (struct mpd_pair **) lua_newuserdata(L, sizeof(struct mpd_pair *));
+	luaL_getmetatable(L, MPD_PAIR_T);
+	lua_setmetatable(L, -2);
 
+	*pair = mpd_recv_url_scheme_pair(*conn);
+	if (*pair == NULL)
+		lua_pushnil(L);
 	return 1;
 }
 
@@ -257,23 +255,22 @@ static int lmpdconn_send_list_tag_types(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_recv_tag_type_name(lua_State *L)
+static int lmpdconn_recv_tag_type_pair(lua_State *L)
 {
-	char *tag_type_name;
+	struct mpd_pair **pair;
 	struct mpd_connection **conn;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
 
 	assert(*conn != NULL);
 
-	tag_type_name = mpd_recv_handler(*conn);
-	if (tag_type_name == NULL)
-		lua_pushnil(L);
-	else {
-		lua_pushstring(L, tag_type_name);
-		free(tag_type_name);
-	}
+	pair = (struct mpd_pair **) lua_newuserdata(L, sizeof(struct mpd_pair *));
+	luaL_getmetatable(L, MPD_PAIR_T);
+	lua_setmetatable(L, -2);
 
+	*pair = mpd_recv_tag_type_pair(*conn);
+	if (*pair == NULL)
+		lua_pushnil(L);
 	return 1;
 }
 
@@ -1985,11 +1982,11 @@ static const luaL_reg lreg_connection[] = {
 	/* capabilities.h */
 	{"send_allowed_commands",	lmpdconn_send_allowed_commands},
 	{"send_disallowed_commands",	lmpdconn_send_disallowed_commands},
-	{"recv_command_name",		lmpdconn_recv_command_name},
+	{"recv_command_pair",		lmpdconn_recv_command_pair},
 	{"send_list_url_schemes",	lmpdconn_send_list_url_schemes},
-	{"recv_handler",		lmpdconn_recv_handler},
+	{"recv_url_scheme_pair",	lmpdconn_recv_url_scheme_pair},
 	{"send_list_tag_types",		lmpdconn_send_list_tag_types},
-	{"recv_tag_type_name",		lmpdconn_recv_tag_type_name},
+	{"recv_tag_type_pair",		lmpdconn_recv_tag_type_pair},
 	/* database.h */
 	{"send_list_all",		lmpdconn_send_list_all},
 	{"send_list_all_meta",		lmpdconn_send_list_all_meta},
