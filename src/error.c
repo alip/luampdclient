@@ -79,8 +79,4 @@ void linit_error(lua_State *L)
 	lua_pushliteral(L, "MPD_ERROR_ACK");
 	lua_pushinteger(L, MPD_ERROR_ACK);
 	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_ERROR_BUFFEROVERRUN");
-	lua_pushinteger(L, MPD_ERROR_BUFFEROVERRUN);
-	lua_settable(L, -3);
 }
