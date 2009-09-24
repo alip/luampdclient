@@ -78,38 +78,6 @@ static int lmpdsong_dup(lua_State *L)
 	return 1;
 }
 
-static int lmpdsong_add_tag(lua_State *L)
-{
-	int type;
-	const char *value;
-	struct mpd_song **song;
-
-	song = luaL_checkudata(L, 1, MPD_SONG_T);
-	type = luaL_checkinteger(L, 2);
-	value = luaL_checkstring(L, 3);
-
-	assert(*song != NULL);
-
-	lua_pushboolean(L, mpd_song_add_tag(*song, type, value));
-
-	return 1;
-}
-
-static int lmpdsong_clear_tag(lua_State *L)
-{
-	int type;
-	struct mpd_song **song;
-
-	song = luaL_checkudata(L, 1, MPD_SONG_T);
-	type = luaL_checkinteger(L, 2);
-
-	assert(*song != NULL);
-
-	mpd_song_clear_tag(*song, type);
-
-	return 0;
-}
-
 static int lmpdsong_get_tag(lua_State *L)
 {
 	int idx, type;
@@ -142,14 +110,6 @@ static int lmpdsong_index(lua_State *L)
 	}
 	else if (strncmp(key, "duration", 5) == 0) {
 		lua_pushinteger(L, mpd_song_get_duration(*song));
-		return 1;
-	}
-	else if (strncmp(key, "add_tag", 8) == 0) {
-		lua_pushcfunction(L, lmpdsong_add_tag);
-		return 1;
-	}
-	else if (strncmp(key, "clear_tag", 10) == 0) {
-		lua_pushcfunction(L, lmpdsong_clear_tag);
 		return 1;
 	}
 	else if (strncmp(key, "get_tag", 8) == 0) {
