@@ -305,7 +305,7 @@ static int lmpdconn_send_list_all_meta(lua_State *L)
 	return 1;
 }
 
-static int lmpdconn_send_ls_meta(lua_State *L)
+static int lmpdconn_send_list_meta(lua_State *L)
 {
 	const char *dir;
 	struct mpd_connection **conn;
@@ -315,7 +315,7 @@ static int lmpdconn_send_ls_meta(lua_State *L)
 
 	assert(*conn != NULL);
 
-	lua_pushboolean(L, mpd_send_ls_meta(*conn, dir));
+	lua_pushboolean(L, mpd_send_list_meta(*conn, dir));
 
 	return 1;
 }
@@ -1990,7 +1990,7 @@ static const luaL_reg lreg_connection[] = {
 	/* database.h */
 	{"send_list_all",		lmpdconn_send_list_all},
 	{"send_list_all_meta",		lmpdconn_send_list_all_meta},
-	{"send_ls_meta",		lmpdconn_send_ls_meta},
+	{"send_list_meta",		lmpdconn_send_list_meta},
 	{"send_update",			lmpdconn_send_update},
 	{"recv_update_id",		lmpdconn_recv_update_id},
 	{"run_update",			lmpdconn_run_update},
