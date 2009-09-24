@@ -40,55 +40,55 @@
 
 void linit_protocol(lua_State *L)
 {
-	lua_pushliteral(L, "MPD_ACK_ERROR_UNK");
-	lua_pushinteger(L, MPD_ACK_ERROR_UNK);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_UNK");
+	lua_pushinteger(L, MPD_SERVER_ERROR_UNK);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_NOT_LIST");
-	lua_pushinteger(L, MPD_ACK_ERROR_NOT_LIST);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_NOT_LIST");
+	lua_pushinteger(L, MPD_SERVER_ERROR_NOT_LIST);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_ARG");
-	lua_pushinteger(L, MPD_ACK_ERROR_ARG);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_ARG");
+	lua_pushinteger(L, MPD_SERVER_ERROR_ARG);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_PASSWORD");
-	lua_pushinteger(L, MPD_ACK_ERROR_PASSWORD);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_PASSWORD");
+	lua_pushinteger(L, MPD_SERVER_ERROR_PASSWORD);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_PERMISSION");
-	lua_pushinteger(L, MPD_ACK_ERROR_PERMISSION);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_PERMISSION");
+	lua_pushinteger(L, MPD_SERVER_ERROR_PERMISSION);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_UNKNOWN_CMD");
-	lua_pushinteger(L, MPD_ACK_ERROR_UNKNOWN_CMD);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_UNKNOWN_CMD");
+	lua_pushinteger(L, MPD_SERVER_ERROR_UNKNOWN_CMD);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_NO_EXIST");
-	lua_pushinteger(L, MPD_ACK_ERROR_NO_EXIST);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_NO_EXIST");
+	lua_pushinteger(L, MPD_SERVER_ERROR_NO_EXIST);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_PLAYLIST_MAX");
-	lua_pushinteger(L, MPD_ACK_ERROR_PLAYLIST_MAX);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_PLAYLIST_MAX");
+	lua_pushinteger(L, MPD_SERVER_ERROR_PLAYLIST_MAX);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_SYSTEM");
-	lua_pushinteger(L, MPD_ACK_ERROR_SYSTEM);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_SYSTEM");
+	lua_pushinteger(L, MPD_SERVER_ERROR_SYSTEM);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_PLAYLIST_LOAD");
-	lua_pushinteger(L, MPD_ACK_ERROR_PLAYLIST_LOAD);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_PLAYLIST_LOAD");
+	lua_pushinteger(L, MPD_SERVER_ERROR_PLAYLIST_LOAD);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_UPDATE_ALREADY");
-	lua_pushinteger(L, MPD_ACK_ERROR_UPDATE_ALREADY);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_UPDATE_ALREADY");
+	lua_pushinteger(L, MPD_SERVER_ERROR_UPDATE_ALREADY);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_PLAYER_SYNC");
-	lua_pushinteger(L, MPD_ACK_ERROR_PLAYER_SYNC);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_PLAYER_SYNC");
+	lua_pushinteger(L, MPD_SERVER_ERROR_PLAYER_SYNC);
 	lua_settable(L, -3);
 
-	lua_pushliteral(L, "MPD_ACK_ERROR_EXIST");
-	lua_pushinteger(L, MPD_ACK_ERROR_EXIST);
+	lua_pushliteral(L, "MPD_SERVER_ERROR_EXIST");
+	lua_pushinteger(L, MPD_SERVER_ERROR_EXIST);
 	lua_settable(L, -3);
 }
