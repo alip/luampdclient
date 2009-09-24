@@ -86,12 +86,12 @@ static int lmpdstatus_index(lua_State *L)
 		lua_pushinteger(L, mpd_status_get_consume(*status));
 		return 1;
 	}
-	else if (strncmp(key, "playlist_length", 16) == 0) {
-		lua_pushnumber(L, mpd_status_get_playlist_length(*status));
+	else if (strncmp(key, "queue_length", 16) == 0) {
+		lua_pushnumber(L, mpd_status_get_queue_length(*status));
 		return 1;
 	}
-	else if (strncmp(key, "playlist_version", 17) == 0) {
-		lua_pushnumber(L, mpd_status_get_playlist_version(*status));
+	else if (strncmp(key, "queue_version", 17) == 0) {
+		lua_pushnumber(L, mpd_status_get_queue_version(*status));
 		return 1;
 	}
 	else if (strncmp(key, "state", 6) == 0) {
