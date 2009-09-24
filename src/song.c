@@ -184,12 +184,8 @@ static int lmpdsong_newindex(lua_State *L)
 
 	assert(*song != NULL);
 
-	if (strncmp(key, "duration", 5) == 0)
-		mpd_song_set_duration(*song, value);
-	else if (strncmp(key, "pos", 4) == 0)
+	if (strncmp(key, "pos", 4) == 0)
 		mpd_song_set_pos(*song, value);
-	else if (strncmp(key, "id", 3) == 0)
-		mpd_song_set_id(*song, value);
 	else
 		return luaL_error(L, "Invalid key `%s'", key);
 
