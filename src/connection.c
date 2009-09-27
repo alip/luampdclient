@@ -1900,6 +1900,27 @@ static int lmpdconn_response_next(lua_State *L)
 	return 1;
 }
 
+/* song.h */
+static int lmpdconn_recv_song(lua_State *L)
+{
+	struct mpd_connection **conn;
+	struct mpd_song **song;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	song = (struct mpd_song **) lua_newuserdata(L, sizeof(struct mpd_song *));
+	luaL_getmetatable(L, MPD_SONG_T);
+	lua_setmetatable(L, -2);
+
+	*song = mpd_recv_song(*conn);
+	if (*song == NULL)
+		lua_pushnil(L);
+
+	return 1;
+}
+
 /* status.h */
 static int lmpdconn_send_status(lua_State *L)
 {
@@ -2100,6 +2121,8 @@ static const luaL_reg lreg_connection[] = {
 	/* response.h */
 	{"response_finish",		lmpdconn_response_finish},
 	{"reponse_next",		lmpdconn_response_next},
+	/* song.h */
+	{"recv_song",			lmpdconn_recv_song},
 	/* status.h */
 	{"send_status",			lmpdconn_send_status},
 	{"recv_status",			lmpdconn_recv_status},
