@@ -2,6 +2,7 @@
 
 /* libmpdclient Lua bindings
    (c) 2009 Ali Polatel <alip@exherbo.org>
+   (c) 2009 Michael Forney <michael@obberon.com>
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -32,66 +33,74 @@
 */
 
 #include <assert.h>
-#include <stdlib.h>
+#include <string.h>
 
 #include <lua.h>
 #include <lauxlib.h>
 
-#include <mpd/connection.h>
-#include <mpd/song.h>
+#include <mpd/stats.h>
 
 #include "globals.h"
 
-LUALIB_API int luaopen_mpdclient(lua_State *L);
-
-static int mpdclient_new(lua_State *L)
+static int lmpdstats_gc(lua_State *L)
 {
-	const char *host;
-	int port;
-	double timeout;
-	struct mpd_connection **conn;
+	struct mpd_stats **stats;
 
-	host = luaL_checkstring(L, 1);
-	port = luaL_checkinteger(L, 2);
-	timeout = luaL_checknumber(L, 3);
+	stats = luaL_checkudata(L, 1, MPD_STATS_T);
 
-	conn = (struct mpd_connection **) lua_newuserdata(L, sizeof(struct mpd_connection *));
-	luaL_getmetatable(L, MPD_CONNECTION_T);
-	lua_setmetatable(L, -2);
+	if (*stats != NULL)
+		mpd_stats_free(*stats);
+	*stats = NULL;
 
-	*conn = mpd_connection_new(host, port, timeout);
-	if (*conn == NULL) {
-		/* Push nil and error message */
-		lua_pushnil(L);
-		lua_pushliteral(L, "out of memory");
-		return 2;
+	return 0;
+}
+
+static int lmpdstats_index(lua_State *L)
+{
+	const char *key;
+	struct mpd_stats **stats;
+
+	stats = luaL_checkudata(L, 1, MPD_STATS_T);
+	key = luaL_checkstring(L, 2);
+
+	assert(*stats != NULL);
+
+	if (strncmp(key, "number_of_artists", 18) == 0) {
+		lua_pushinteger(L, mpd_stats_get_number_of_artists(*stats));
 	}
-
+	else if (strncmp(key, "number_of_albums", 17) == 0) {
+		lua_pushinteger(L, mpd_stats_get_number_of_albums(*stats));
+	}
+	else if (strncmp(key, "number_of_songs", 16) == 0) {
+		lua_pushinteger(L, mpd_stats_get_number_of_songs(*stats));
+	}
+	else if (strncmp(key, "uptime", 7) == 0) {
+		lua_pushinteger(L, mpd_stats_get_uptime(*stats));
+	}
+	else if (strncmp(key, "db_update_time", 15) == 0) {
+		lua_pushinteger(L, mpd_stats_get_uptime(*stats));
+	}
+	else if (strncmp(key, "play_time", 10) == 0) {
+		lua_pushinteger(L, mpd_stats_get_play_time(*stats));
+	}
+	else if (strncmp(key, "db_play_time", 13) == 0) {
+		lua_pushinteger(L, mpd_stats_get_db_play_time(*stats));
+	}
+	else
+		return luaL_error(L, "Invalid key `%s'", key);
 	return 1;
 }
 
-static const luaL_reg reg_global[] = {
-	{"new",		mpdclient_new},
+static const luaL_reg lreg_stats[] = {
+	{"__gc",	lmpdstats_gc},
+	{"__index",	lmpdstats_index},
 	{NULL,		NULL},
 };
 
-LUALIB_API int luaopen_mpdclient(lua_State *L)
+void linit_stats(lua_State *L)
 {
-	/* Register mpdclient module */
-	luaL_register(L, "mpdclient", reg_global);
-
-	linit_connection(L);
-	linit_directory(L);
-	linit_entity(L);
-	linit_error(L);
-	linit_idle(L);
-	linit_output(L);
-	linit_pair(L);
-	linit_playlist(L);
-	linit_protocol(L);
-	linit_song(L);
-	linit_stats(L);
-	linit_status(L);
-
-	return 1;
+	/* Register MPD_STATS_T metatable */
+	luaL_newmetatable(L, MPD_STATS_T);
+	luaL_register(L, NULL, lreg_stats);
+	lua_pop(L, 1);
 }

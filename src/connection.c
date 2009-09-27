@@ -1921,6 +1921,60 @@ static int lmpdconn_recv_song(lua_State *L)
 	return 1;
 }
 
+/* stats.h */
+static int lmpdconn_send_stats(lua_State *L)
+{
+	struct mpd_connection **conn;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	lua_pushboolean(L, mpd_send_stats(*conn));
+
+	return 1;
+}
+
+static int lmpdconn_recv_stats(lua_State *L)
+{
+	struct mpd_connection **conn;
+	struct mpd_stats **stats;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	stats = (struct mpd_stats **) lua_newuserdata(L, sizeof(struct mpd_stats *));
+	luaL_getmetatable(L, MPD_STATS_T);
+	lua_setmetatable(L, -2);
+
+	*stats = mpd_recv_stats(*conn);
+	if (*stats == NULL)
+		lua_pushnil(L);
+
+	return 1;
+}
+
+static int lmpdconn_run_stats(lua_State *L)
+{
+	struct mpd_connection **conn;
+	struct mpd_stats **stats;
+
+	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+
+	assert(*conn != NULL);
+
+	stats = (struct mpd_stats **) lua_newuserdata(L, sizeof(struct mpd_stats *));
+	luaL_getmetatable(L, MPD_STATS_T);
+	lua_setmetatable(L, -2);
+
+	*stats = mpd_run_stats(*conn);
+	if (*stats == NULL)
+		lua_pushnil(L);
+
+	return 1;
+}
+
 /* status.h */
 static int lmpdconn_send_status(lua_State *L)
 {
@@ -2123,6 +2177,10 @@ static const luaL_reg lreg_connection[] = {
 	{"reponse_next",		lmpdconn_response_next},
 	/* song.h */
 	{"recv_song",			lmpdconn_recv_song},
+	/* stats.h */
+	{"send_stats",			lmpdconn_send_stats},
+	{"recv_stats",			lmpdconn_recv_stats},
+	{"run_stats",			lmpdconn_run_stats},
 	/* status.h */
 	{"send_status",			lmpdconn_send_status},
 	{"recv_status",			lmpdconn_recv_status},

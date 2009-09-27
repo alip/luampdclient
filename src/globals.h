@@ -43,6 +43,7 @@
 #define MPD_PAIR_T		"MpdClient.Pair"
 #define MPD_PLAYLIST_T		"MpdClient.Playlist"
 #define MPD_SONG_T		"MpdClient.Song"
+#define MPD_STATS_T		"MpdClient.Stats"
 #define MPD_STATUS_T		"MpdClient.Status"
 
 void linit_connection(lua_State *L);
@@ -55,6 +56,7 @@ void linit_pair(lua_State *L);
 void linit_playlist(lua_State *L);
 void linit_protocol(lua_State *L);
 void linit_song(lua_State *L);
+void linit_stats(lua_State *L);
 void linit_status(lua_State *L);
 
 /* Helper functions */
