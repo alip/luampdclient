@@ -11,12 +11,12 @@ The following files are done:
   - mpd/idle.h
   - mpd/list.h
   - mpd/output.h
-  - mpd/pair.h (we use Lua tables instead of mpd_pair)
+  - mpd/pair.h (we use Lua tables instead of mpd\_pair)
   - mpd/protocol.h
   - mpd/response.h
   - mpd/song.h
   - mpd/status.h
-  - mpd/stored_playlist.h
+  - mpd/stored\_playlist.h
   - mpd/tag.h
 
 These files are left:
