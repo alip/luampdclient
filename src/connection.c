@@ -1,7 +1,7 @@
 /* vim: set cino= fo=croql sw=8 ts=8 sts=0 noet autoindent cindent fdm=syntax : */
 
 /* libmpdclient Lua bindings
-   (c) 2009 Ali Polatel <alip@exherbo.org>
+   (c) 2009, 2010 Ali Polatel <alip@exherbo.org>
    (c) 2009 Michael Forney <michael@obberon.com>
 
    Redistribution and use in source and binary forms, with or without
@@ -426,13 +426,15 @@ static int lmpdconn_send_noidle(lua_State *L)
 
 static int lmpdconn_recv_idle(lua_State *L)
 {
+	bool disable_timeout;
 	struct mpd_connection **conn;
 
 	conn = luaL_checkudata(L, 1, MPD_CONNECTION_T);
+	disable_timeout = lua_toboolean(L, 2);
 
 	assert(*conn != NULL);
 
-	lua_pushinteger(L, mpd_recv_idle(*conn));
+	lua_pushinteger(L, mpd_recv_idle(*conn, disable_timeout));
 
 	return 1;
 }

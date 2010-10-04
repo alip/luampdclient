@@ -1,7 +1,7 @@
 /* vim: set cino= fo=croql sw=8 ts=8 sts=0 noet autoindent cindent fdm=syntax : */
 
 /* libmpdclient Lua bindings
-   (c) 2009 Ali Polatel <alip@exherbo.org>
+   (c) 2009, 2010 Ali Polatel <alip@exherbo.org>
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -176,9 +176,5 @@ void linit_status(lua_State *L)
 
 	lua_pushliteral(L, "MPD_STATE_PAUSE");
 	lua_pushinteger(L, MPD_STATE_PAUSE);
-	lua_settable(L, -3);
-
-	lua_pushliteral(L, "MPD_STATUS_NO_VOLUME");
-	lua_pushinteger(L, MPD_STATUS_NO_VOLUME);
 	lua_settable(L, -3);
 }

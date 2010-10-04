@@ -4,7 +4,7 @@ dnl {{{ Program
 AC_PREREQ(2.59)
 AC_INIT([src/mpdclient.c])
 
-AM_INIT_AUTOMAKE(luampdclient, [2.0~git])
+AM_INIT_AUTOMAKE(luampdclient, [2.2~git])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 dnl }}}
 
@@ -27,8 +27,8 @@ dnl {{{ Library checks
 PKG_PROG_PKG_CONFIG([0.20.0])
 PKG_CHECK_MODULES([lua], [lua >= 5.1],,
 				  [AC_MSG_ERROR([luampdclient requires lua-5.1 or newer])])
-PKG_CHECK_MODULES([libmpdclient], [libmpdclient >= 2.0],,
-				  AC_MSG_ERROR([luampdclient requires libmpdclient-2.0 or newer]))
+PKG_CHECK_MODULES([libmpdclient], [libmpdclient >= 2.2],,
+				  AC_MSG_ERROR([luampdclient requires libmpdclient-2.2 or newer]))
 dnl }}}
 
 dnl {{{
